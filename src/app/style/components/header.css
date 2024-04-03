@@ -13,6 +13,7 @@
 .header a{
     color: #fff;
     margin: 0 10px;
+    text-decoration: none;
 }
 .header-inner>div{
     display: flex;
@@ -51,7 +52,7 @@
 
 
 }
-.header-button--green{
+a.header-button--green { 
     border: 1px solid rgba(163, 218, 165, .5);
     color: #A3DAA5;
 

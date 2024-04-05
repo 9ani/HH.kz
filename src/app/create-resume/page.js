@@ -12,6 +12,8 @@ import AutoCompliteTags from "@/components/AutoCompliteTags";
 
 export default function CreateResume() {
   const [cities, setCities] = useState([]);
+  const [skills, setSkills] = useState([]);
+
   const [countries, setCountries] = useState([]);
   const [workingHistories, setWorkingHistories] = useState([]);
 
@@ -24,6 +26,10 @@ export default function CreateResume() {
     });
     axios.get(`${END_POINT}/api/region/countries`).then((res) => {
       setCountries(res.data);
+    });
+
+    axios.get(`${END_POINT}/api/skills`).then((res) => {
+      setSkills(res.data);
     });
   }, []);
 
@@ -156,7 +162,7 @@ export default function CreateResume() {
           type="text"
           label="ключевые навыки"
           size="fieldset-md"
-          items={countries}
+          items={skills}
           onSelect={onSelect}/>
       </div>
     </main>

@@ -14,38 +14,54 @@ export default function AutoCompliteTags({
   const [filteredItems, setFilteredItems] = useState([]);
 
   const onClick = (item) => {
-    // onSelect(item);
     setValue([...value, item]);
   };
-  const reset = () => {
-    setValue([]);
-    onSelect(null);
+  const deleteTag = (tag) => {
+    let v = [...value];
+    let index = value.indexOf(tag);
+    v.splice(index, 1);
+    setValue(v);
+
+    setFilteredItems([...filteredItems, value]);
   };
 
   const onChange = (e) => {
     if (e.target.value === "") {
       setFilteredItems([]);
     } else {
-      setFilteredItems([
-        ...items.filter((item) => item.name.includes(e.target.value)),
-      ]);
+      const filter = items.filter((item) => item.name.includes(e.target.value));
+
+      let fi = [];
+      filter.map((item) => {
+        let exist = false;
+        value.map((tag) => {
+          if (tag.name === item.name) {
+            exist = true;
+          }
+        });
+        if (!exist) {
+          fi.push(item);
+        }
+      });
+      setFilteredItems(fi);
     }
   };
 
   useEffect(() => {
     let fi = [];
     filteredItems.map((item) => {
-      let exist = false
+      let exist = false;
       value.map((tag) => {
         if (tag.name === item.name) {
-          exist = true
+          exist = true;
         }
       });
-      if(!exist){
-        fi.push(item)
+      if (!exist) {
+        fi.push(item);
       }
     });
-    setFilteredItems(fi)
+    setFilteredItems(fi);
+    onSelect(value);
   }, [value]);
 
   return (
@@ -55,27 +71,28 @@ export default function AutoCompliteTags({
           value.map((tag) => (
             <div className="tag">
               <span>{tag.name} </span>
-              <i onClick={reset}>X</i>
+              <i onClick={() => deleteTag(tag)}>X</i>
             </div>
           ))}
       </div>
+      <div className={"autocomplite " + size}>
+        <Input
+          placeholder={placeholder}
+          type={type}
+          onChange={onChange}
+          label={label}
+          size={size}
+        />
 
-      <Input
-        placeholder={placeholder}
-        type={type}
-        onChange={onChange}
-        label={label}
-        size={size}
-      />
-
-      {items.length > 0 && (
-        <div className="dropdown dropdown-tags">
-          <h4>Рекомендуемые навыки</h4>
-          {filteredItems.map((item) => (
-            <a onClick={() => onClick(item)}>{item.name}</a>
-          ))}
-        </div>
-      )}
+        {items.length > 0 && (
+          <div className="dropdown dropdown-tags">
+            <h4>Рекомендуемые навыки</h4>
+            {filteredItems.map((item) => (
+              <a onClick={() => onClick(item)}>{item.name}</a>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

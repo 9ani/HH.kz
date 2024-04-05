@@ -6,11 +6,16 @@ import { END_POINT } from "@/config/end-point";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SelectDate from "@/components/SelectDate";
+import ModalAddExp from "@/components/ModalAddExp";
+import WorkingHistory from "@/components/WorkingHistory";
+import AutoCompliteTags from "@/components/AutoCompliteTags";
 
 export default function CreateResume() {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
+  const [workingHistories, setWorkingHistories] = useState([]);
 
+  const [modalExpIsOpen, setModalExpIsOpen] = useState(false);
   useEffect(() => {
     console.log("didMount");
 
@@ -24,6 +29,22 @@ export default function CreateResume() {
 
   console.log("rerender");
   const onSelect = (data) => {};
+
+  const closeModalExp = () => {
+    setModalExpIsOpen(false);
+  };
+
+  const addWorkingHistory = (item) => {
+    setWorkingHistories([...workingHistories, item]);
+    closeModalExp();
+  };
+
+  const removeWorkingHistory = (workingHistory) => {
+    let wh = [...workingHistories];
+    let index = workingHistories.indexOf(workingHistory);
+    wh.splice(index, 1);
+    setWorkingHistories(wh);
+  };
 
   return (
     <main>
@@ -98,18 +119,45 @@ export default function CreateResume() {
         </fieldset>
 
         <h3>Опыт работы</h3>
-
+        {modalExpIsOpen && (
+          <ModalAddExp
+            close={closeModalExp}
+            addWorkingHistory={addWorkingHistory}
+          />
+        )}
         <fieldset className={"fieldset fieldset-lg"}>
           <label>Места работы</label>
           <div className="exp">
-            <div>
-
-            </div>
-            <button className="button button-primary-bordered">Добавить место работы</button>
-            
+            {workingHistories.map((item) => (
+              <WorkingHistory
+                workingHistory={item}
+                remove={removeWorkingHistory}
+              />
+            ))}
+            <button
+              className="button button-primary-bordered"
+              onClick={() => setModalExpIsOpen(true)}
+            >
+              Добавить место работы
+            </button>
           </div>
-
         </fieldset>
+
+        <fieldset className={"fieldset fieldset-lg"}>
+          <label>О себе</label>
+          <textarea
+            className="textarea"
+            placeholder="Расскажите о себе"
+            
+          ></textarea>
+        </fieldset>
+
+        <AutoCompliteTags  placeholder=""
+          type="text"
+          label="ключевые навыки"
+          size="fieldset-md"
+          items={countries}
+          onSelect={onSelect}/>
       </div>
     </main>
   );

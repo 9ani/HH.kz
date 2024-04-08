@@ -9,6 +9,8 @@ import SelectDate from "@/components/SelectDate";
 import ModalAddExp from "@/components/ModalAddExp";
 import WorkingHistory from "@/components/WorkingHistory";
 import AutoCompliteTags from "@/components/AutoCompliteTags";
+import AddEducation from "@/components/AddEducation";
+import AddLang from "@/components/AddLang";
 
 export default function CreateResume() {
   const [cities, setCities] = useState([]);
@@ -154,16 +156,25 @@ export default function CreateResume() {
           <textarea
             className="textarea"
             placeholder="Расскажите о себе"
-            
           ></textarea>
         </fieldset>
 
-        <AutoCompliteTags  placeholder=""
+        <AutoCompliteTags
+          placeholder=""
           type="text"
-          label="ключевые навыки"
+          label="Ключевые навыки"
           size="fieldset-md"
           items={skills}
-          onSelect={onSelect}/>
+          onSelect={onSelect}
+        />
+
+        <h3>Образование</h3>
+        <AddEducation onChange={()=>null}/>
+
+        <h3>Владение языками</h3>
+
+        <AddLang/ >
+
       </div>
     </main>
   );

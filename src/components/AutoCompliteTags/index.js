@@ -86,7 +86,6 @@ export default function AutoCompliteTags({
 
         {items.length > 0 && (
           <div className="dropdown dropdown-tags">
-            <h4>Рекомендуемые навыки</h4>
             {filteredItems.map((item) => (
               <a onClick={() => onClick(item)}>{item.name}</a>
             ))}

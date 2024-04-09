@@ -11,10 +11,12 @@ import WorkingHistory from "@/components/WorkingHistory";
 import AutoCompliteTags from "@/components/AutoCompliteTags";
 import AddEducation from "@/components/AddEducation";
 import AddLang from "@/components/AddLang";
+import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
 
 export default function CreateResume() {
   const [cities, setCities] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [employmentTypes, setEmploymentTypes] = useState([]);
 
   const [countries, setCountries] = useState([]);
   const [workingHistories, setWorkingHistories] = useState([]);
@@ -32,6 +34,9 @@ export default function CreateResume() {
 
     axios.get(`${END_POINT}/api/skills`).then((res) => {
       setSkills(res.data);
+    });
+    axios.get(`${END_POINT}/api/employment-types`).then((res) => {
+      setEmploymentTypes(res.data);
     });
   }, []);
 
@@ -169,12 +174,22 @@ export default function CreateResume() {
         />
 
         <h3>Образование</h3>
-        <AddEducation onChange={()=>null}/>
+        <AddEducation onChange={() => null} />
 
         <h3>Владение языками</h3>
 
-        <AddLang/ >
+        <AddLang onChange={() => {}} />
 
+        <h3>Другая важная информация</h3>
+
+        <SelectEmploymentTypes
+          label="Занятость"
+          employmentTypes={employmentTypes}
+          size="fieldset-md"
+        />
+        <button className="button button-primary">
+          Сохранить и опубликовать
+        </button>
       </div>
     </main>
   );

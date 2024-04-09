@@ -1,70 +1,51 @@
 import { useState, useEffect } from "react";
 
 export default function AddLang({ onChange }) {
-  const [education, setEducation] = useState([]);
+  const [foreignLanguages, setForeignLanguages] = useState([]);
 
-  const educations = education.map((ed, index) => (
-    <div key={index} className="education">
-      <sapn onClick={() => removeEd(ed)}>X</sapn>
-      <fieldset className={"fieldset fieldset-md"}>
-        <label>Уровень</label>
-        <select
-          className="input"
-          onChange={onChangeData}
-          name={index + "-level"}
-          value={ed.level}
-        >
-          <option value={"Высшее"}>Высшее</option>
-          <option value={"Не полное высшее"}>Не полное высшее</option>
-        </select>
-      </fieldset>
+  const remove=(index)=>{
+    const langs = [...foreignLanguages]
+    langs.splice(index, 1)
+    setForeignLanguages(langs)
+  }
+  const onSelect=(e)=>{
+    const [index, key]=e.target.name.split("-")
+    const langs = [...foreignLanguages]
+    langs[index][key]=e.target.value
+    setForeignLanguages(langs)
+    onChange(langs)
+  }
 
-      <fieldset className={"fieldset fieldset-md"}>
-        <label>Название учебного заведения</label>
-        <input
-          className="input"
-          onChange={onChangeData}
-          type="text"
-          name={index + "-univercity_name"}
-          value={ed.univercity_name}
-        />
-      </fieldset>
-      <fieldset className={"fieldset fieldset-md"}>
-        <label>Факультет</label>
-        <input
-          className="input"
-          onChange={onChangeData}
-          type="text"
-          name={index + "-faculty"}
-          value={ed.faculty}
-        />
-      </fieldset>
-      <fieldset className={"fieldset fieldset-md"}>
-        <label>Специализация</label>
-        <input
-          className="input"
-          onChange={onChangeData}
-          type="text"
-          name={index + "-major"}
-          value={ed.major}
-        />
-      </fieldset>
-      <fieldset className={"fieldset fieldset-md"}>
-        <label>Год оканчания</label>
-        <input
-          className="input"
-          onChange={onChangeData}
-          type="text"
-          name={index + "-end_date"}
-          value={ed.end_date}
-        />
-      </fieldset>
+  const lns = foreignLanguages.map((ln, index) => (
+    <div key={index} className="lns fieldset-md selectDate selectdate-noday">
+      <span className="remove" onClick={()=>remove(index)}>X</span>
+      <select placeholder="Язык" className="input" name={index + "-name"} value={foreignLanguages[index].name} onChange={onSelect}>
+        <option value="Казахский">Казахский</option>
+        <option value="Английский">Английский</option>
+        <option value="Русский">Русский</option>
+      </select>
+
+      <select placeholder="Уровень" className="input"  name={index + "-level"} value={foreignLanguages[index].level}  onChange={onSelect}>
+        <option value="A1">А1 - Начальный</option>
+        <option value="A2">A2 - Элементарный</option>
+        <option value="B1">B1 - Средний</option>
+        <option value="B2">B2 - Средне-продвинутый</option>
+        <option value="C1">C1 - Продвинутый</option>
+        <option value="C2">C2 - в совершенстве</option>
+      
+      </select>
     </div>
   ));
   return (
     <div className="eds">
-      {/* {educations} */}
-      <a>Добавить язык</a>
+      {lns}
+      <a
+        onClick={() =>
+          setForeignLanguages([...foreignLanguages, { name: "", level: "" }])
+        }
+      >
+        Добавить язык
+      </a>
     </div>
   );
 }

@@ -1,19 +1,66 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import {
+  authorize,
+  sendVerificationEmail,
+  verifyCode,
+} from "@/app/store/slices/authSlice";
 
 export default function UserLogin() {
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
+  const [time, setTime] = useState(119);
+  const [code, setCode] = useState("");
+  const isAuth = useSelector((state) => state.auth.isAuth);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const sendVerifyEmail = () => {
+    dispatch(sendVerificationEmail(email));
+    setStep(2);
+  };
+
+  const verifyCodeFunc = () => {
+    dispatch(verifyCode(email, code));
+  };
+  useEffect(() => {
+    let interval;
+    if (step === 2) {
+      interval = setInterval(() => {
+        if (time !== 0) {
+          setTime((time) => time - 1);
+        }
+      }, 1000);
+    } else if (interval) {
+      clearInterval(interval);
+    }
+  }, [step]);
+
+  useEffect(() => {
+    if (isAuth) {
+      router.push("/resumes");
+    }
+  }, [isAuth]);
+
+  const min = parseInt(time / 60);
+  const sec = time % 60;
+
   return (
     <section className="login-page">
+      {isAuth ? "True" : "False"}
+
       {step === 1 && (
         <div className="card">
           <h1>Поиск работы</h1>
           <form>
-            <input className="input" placeholder="Введите email" />
-            <button
-              className="button button-primary"
-              onClick={() => setStep(2)}
-            >
+            <input
+              className="input"
+              placeholder="Введите email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button className="button button-primary" onClick={sendVerifyEmail}>
               Продолжить
             </button>
           </form>
@@ -38,11 +85,19 @@ export default function UserLogin() {
             входит в личный кабинет
           </p>
           <form>
-            <input className="input" placeholder="Введите код" />
-            <p>Повторить можно через 00:48</p>
+            <input
+              className="input"
+              placeholder="Введите код"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
+            <p>
+              Повторить можно через {min}:{sec}
+            </p>
             <button
               className="button button-primary"
-              onClick={() => setStep(3)}
+              type="button"
+              onClick={verifyCodeFunc}
             >
               Подтвердить
             </button>
@@ -56,14 +111,20 @@ export default function UserLogin() {
         </div>
       )}
 
-      {step === 3 && (
+      {/* {step === 3 && (
         <div className="card">
           <h1>Давайте познакомимся</h1>
           <form>
             <input className="input" placeholder="Имя" />
             <input className="input" placeholder="Фамилия" />
 
-            <button className="button button-primary">Продолжить</button>
+            <button
+              className="button button-primary"
+              type="button"
+              onClick={() => dispatch(authorize())}
+            >
+              Продолжить
+            </button>
             <button
               className="button button-primary-bordered"
               onClick={() => setStep(2)}
@@ -72,7 +133,7 @@ export default function UserLogin() {
             </button>
           </form>
         </div>
-      )}
+      )} */}
     </section>
   );
 }

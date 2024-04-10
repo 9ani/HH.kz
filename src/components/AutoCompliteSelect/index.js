@@ -10,10 +10,12 @@ export default function AutoCompliteSelect({
   onSelect,
 }) {
   const [value, setValue] = useState({ name: "" });
+  const [input, setInput] = useState("")
 
   const [filteredItems, setFilteredItems] = useState([]);
 
   const onClick = (item) => {
+    setInput("")
     onSelect(item);
     setValue(item);
     setFilteredItems([]);
@@ -24,6 +26,7 @@ export default function AutoCompliteSelect({
   };
 
   const onChange = (e) => {
+    setInput(e.target.value)
     if (e.target.value === "") {
       setFilteredItems([]);
     } else {
@@ -41,6 +44,7 @@ export default function AutoCompliteSelect({
         onChange={onChange}
         label={label}
         size={size}
+        value={input}
       />
       {value.name !== "" && (
         <div className="tag">
@@ -49,7 +53,7 @@ export default function AutoCompliteSelect({
         </div>
       )}
 
-      {items.length > 0 && (
+      {filteredItems.length > 0 && (
         <div className="dropdown">
           {filteredItems.map((item) => (
             <a onClick={() => onClick(item)}>{item.name}</a>

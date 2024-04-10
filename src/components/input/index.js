@@ -1,4 +1,4 @@
-export default function Input({ label, placeholder, type, onChange, size }) {
+export default function Input({ label, placeholder, type, onChange, size, value }) {
   return (
     <fieldset className={"fieldset " + size}>
       <label>{label}</label>
@@ -7,6 +7,7 @@ export default function Input({ label, placeholder, type, onChange, size }) {
         placeholder={placeholder}
         type={type}
         onChange={onChange}
+        value={value}
       />
     </fieldset>
   );

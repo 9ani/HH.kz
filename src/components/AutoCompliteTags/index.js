@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Input from "../input";
 export default function AutoCompliteTags({
   label,
@@ -9,12 +9,13 @@ export default function AutoCompliteTags({
   items,
   onSelect,
 }) {
-  const [value, setValue] = useState([{ name: "" }]);
-
+  const [value, setValue] = useState([]);
+  const [input, setInput] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
   const onClick = (item) => {
     setValue([...value, item]);
+    setInput("");
   };
   const deleteTag = (tag) => {
     let v = [...value];
@@ -26,6 +27,7 @@ export default function AutoCompliteTags({
   };
 
   const onChange = (e) => {
+    setInput(e.target.value)
     if (e.target.value === "") {
       setFilteredItems([]);
     } else {
@@ -64,12 +66,17 @@ export default function AutoCompliteTags({
     onSelect(value);
   }, [value]);
 
+  useEffect(() => {
+    console.log(items);
+    console.log(filteredItems);
+  }, [items, filteredItems]);
+
   return (
     <div className="fieldset-lg">
       <div className="tags">
         {value.length > 0 &&
           value.map((tag) => (
-            <div className="tag">
+            <div className="tag" key={tag}>
               <span>{tag.name} </span>
               <i onClick={() => deleteTag(tag)}>X</i>
             </div>
@@ -82,9 +89,10 @@ export default function AutoCompliteTags({
           onChange={onChange}
           label={label}
           size={size}
+          value={input}
         />
 
-        {items.length > 0 && (
+        {filteredItems.length > 0 && (
           <div className="dropdown dropdown-tags">
             {filteredItems.map((item) => (
               <a onClick={() => onClick(item)}>{item.name}</a>

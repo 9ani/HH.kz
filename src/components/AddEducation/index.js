@@ -16,7 +16,7 @@ export default function AddEducation({ onChange }) {
     setEducation([
       ...education,
       {
-        level: "",
+        level: "Высшее",
         univercity_name: "",
         faculty: "",
         major: "",

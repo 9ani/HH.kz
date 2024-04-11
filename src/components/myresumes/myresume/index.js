@@ -1,14 +1,14 @@
-export default function MyResume({ item }) {
+export default function MyResume({  position, createdAt, show, views, applies}) {
   return (
     <div className="card mtb4">
-      <a className="h3">{item.position}</a>
-      <p>Создан {item.createdAt}</p>
+      <a className="h3">{position}</a>
+      <p>Создан {createdAt}</p>
 
       <h3>Статистика</h3>
       <div className="flex">
-        <a className="p3">{item.stats.show}</a>
-        <a className="p3">{item.stats.views}</a>
-        <a className="p3">{item.stats.applies}</a>
+        <a className="p3">{show}</a>
+        <a className="p3">{views}</a>
+        <a className="p3">{applies}</a>
       </div>
     </div>
   );

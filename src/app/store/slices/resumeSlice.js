@@ -18,11 +18,21 @@ export const { setMyResumes } = resumeSlice.actions;
 
 export const getMyResumes = () => async (dispatch) => {
   try {
-     const resumes = await axios.get(`${END_POINT}/api/resumes`);
-     dispatch(setMyResumes(resumes))
+     const res = await axios.get(`${END_POINT}/api/resume`);
+     dispatch(setMyResumes({resumes: res.data}))
   } catch (e) {
     alert("Something went wrong, Try later!")
   }
 };
+
+export const createResume = (sendData, router)=> async(dispatch)=>{
+  try {
+    const res = await axios.post(`${END_POINT}/api/resume`, sendData);
+    router.push("/resumes")
+    dispatch(setMyResumes({resumes: res.data}))
+ } catch (e) {
+   alert("Something went wrong, Try later!")
+ }
+}
 
 export default resumeSlice.reducer;

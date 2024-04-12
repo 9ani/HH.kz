@@ -6,33 +6,48 @@ export const resumeSlice = createSlice({
   name: "resume",
   initialState: {
     resumes: [],
+    resume: {},
   },
   reducers: {
     setMyResumes: (state, action) => {
       state.resumes = action.payload.resumes;
     },
+    uppendResume: (state, action) => {
+      state.resumes = [...state.resumes, action.payload.newresume];
+    },
+    setResume: (state, action) => {
+      state.resume = action.payload.resume;
+    },
   },
 });
 
-export const { setMyResumes } = resumeSlice.actions;
+export const { setMyResumes, uppendResume , setResume} = resumeSlice.actions;
 
 export const getMyResumes = () => async (dispatch) => {
   try {
-     const res = await axios.get(`${END_POINT}/api/resume`);
-     dispatch(setMyResumes({resumes: res.data}))
+    const res = await axios.get(`${END_POINT}/api/resume`);
+    dispatch(setMyResumes({ resumes: res.data }));
   } catch (e) {
-    alert("Something went wrong, Try later!")
+    alert("Something went wrong, Try later!");
+  }
+};
+export const getResumeById = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`${END_POINT}/api/resume/${id}`);
+    dispatch(setResume({ resume: res.data }));
+  } catch (e) {
+    alert("Something went wrong, Try later!");
   }
 };
 
-export const createResume = (sendData, router)=> async(dispatch)=>{
+export const createResume = (sendData, router) => async (dispatch) => {
   try {
     const res = await axios.post(`${END_POINT}/api/resume`, sendData);
-    router.push("/resumes")
-    dispatch(setMyResumes({resumes: res.data}))
- } catch (e) {
-   alert("Something went wrong, Try later!")
- }
-}
+    router.push("/resumes");
+    dispatch(setMyResumes({ resumes: res.data }));
+  } catch (e) {
+    alert("Something went wrong, Try later!");
+  }
+};
 
 export default resumeSlice.reducer;

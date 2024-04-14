@@ -55,8 +55,8 @@ export default function AutoCompliteSelect({
 
       {filteredItems.length > 0 && (
         <div className="dropdown">
-          {filteredItems.map((item) => (
-            <a onClick={() => onClick(item)}>{item.name}</a>
+          {filteredItems.map((item, index) => (
+            <a key={index} onClick={() => onClick(item)}>{item.name}</a>
           ))}
         </div>
       )}

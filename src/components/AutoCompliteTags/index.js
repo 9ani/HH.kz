@@ -75,8 +75,8 @@ export default function AutoCompliteTags({
     <div className="fieldset-lg">
       <div className="tags">
         {value.length > 0 &&
-          value.map((tag) => (
-            <div className="tag" key={tag}>
+          value.map((tag, index) => (
+            <div className="tag" key={index}>
               <span>{tag.name} </span>
               <i onClick={() => deleteTag(tag)}>X</i>
             </div>

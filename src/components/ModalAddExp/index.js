@@ -11,22 +11,23 @@ export default function ModalAddExp({ close, addWorkingHistory }) {
   const onChangeMonth = (e) => {
     let date = new Date(start_date);
     date.setMonth(e.target.value);
-    setStartDate(date.getTime());
+    setStartDate(date.toISOString());
   };
+
   const onChangeYear = (e) => {
     let date = new Date(start_date);
     date.setFullYear(e.target.value);
-    setStartDate(date.getTime());
+    setStartDate(date.toISOString());
   };
   const onChangeMonthEnd = (e) => {
     let date = new Date(end_date);
     date.setMonth(e.target.value);
-    setEndDate(date.getTime());
+    setEndDate(date.toISOString());
   };
   const onChangeYearEnd = (e) => {
     let date = new Date(end_date);
     date.setFullYear(e.target.value);
-    setEndDate(date.getTime());
+    setEndDate(date.toISOString());
   };
   const onChangeCompanyName = (e) => {
     setCompany_name(e.target.value);

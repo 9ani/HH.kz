@@ -37,7 +37,7 @@ export default function CreateResume() {
   const [salary_type, setSalaryType] = useState("KZT");
   const [skills, setSelectedSkills] = useState("");
   const [education, setEducation] = useState([]);
-  const [foreignLanguages, setForeignLanguages] = useState("");
+  const [foreignLanguages, setForeignLanguages] = useState([]);
   const [employmentTypes, setSelectedEmpTypes] = useState([]);
   const [about, setAbout] = useState("");
 
@@ -83,7 +83,10 @@ export default function CreateResume() {
     setSelectedSkills(arr.join(","));
   };
 
+  
+
   const handleSave = () => {
+    console.log(foreignLanguages,workingHistories,employmentTypes );
     dispatch(
       createResume(
         {
@@ -98,12 +101,12 @@ export default function CreateResume() {
           about,
           salary,
           salary_type,
-          workingHistories,
+          workingHistories, 
           skills,
-          education,
+          education, 
           employmentTypes,
-          main_language:"",
-          foreignLanguages,
+          foreignLanguages, 
+          main_language : ""
         },
         router
       )

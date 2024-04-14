@@ -21,7 +21,7 @@ export const resumeSlice = createSlice({
   },
 });
 
-export const { setMyResumes, uppendResume , setResume} = resumeSlice.actions;
+export const { setMyResumes, uppendResume, setResume } = resumeSlice.actions;
 
 export const getMyResumes = () => async (dispatch) => {
   try {

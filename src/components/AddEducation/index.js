@@ -17,7 +17,7 @@ export default function AddEducation({ onChange }) {
       ...education,
       {
         level: "Высшее",
-        univercity_name: "",
+        university_name: "",
         faculty: "",
         major: "",
         end_date: "",
@@ -57,8 +57,8 @@ export default function AddEducation({ onChange }) {
           className="input"
           onChange={onChangeData}
           type="text"
-          name={index + "-univercity_name"}
-          value={ed.univercity_name}
+          name={index + "-university_name"}
+          value={ed.university_name}
         />
       </fieldset>
       <fieldset className={"fieldset fieldset-md"}>

@@ -1,165 +1,305 @@
 "use client";
+import AutoCompliteSelect from "@/components/AutoCompliteSelect";
 import Header from "@/components/header";
-import MyResumes from "@/components/myresumes";
+import Input from "@/components/input";
+import { END_POINT } from "@/config/end-point";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import SelectDate from "@/components/SelectDate";
+import ModalAddExp from "@/components/ModalAddExp";
+import WorkingHistory from "@/components/WorkingHistory";
+import AutoCompliteTags from "@/components/AutoCompliteTags";
+import AddEducation from "@/components/AddEducation";
+import AddLang from "@/components/AddLang";
+import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
+import { useRouter, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
-import { useEffect } from "react";
-import { getResumeById } from "@/app/store/slices/resumeSlice";
-import { useParams } from "next/navigation";
-export default function ResumePage() {
+import { createResume, getResumeById } from "@/app/store/slices/resumeSlice";
+
+export default function CreateResume() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
   const resume = useSelector((state) => state.resume.resume);
-  const didMount = () => {
+  const [cities, setCities] = useState([]);
+  const [allSkills, setSkills] = useState([]);
+  const [allEmploymentTypes, setEmploymentTypes] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [workingHistories, setWorkingHistories] = useState([]);
+  const [modalExpIsOpen, setModalExpIsOpen] = useState(false);
+  const [first_name, setName] = useState("");
+  const [last_name, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [cityId, setCity] = useState();
+  const [birthday, setBirthday] = useState();
+  const [gender, setGender] = useState("");
+  const [citizenship, setCitizenship] = useState();
+  const [position, setPosition] = useState("");
+  const [salary, setSalary] = useState();
+  const [salary_type, setSalaryType] = useState("KZT");
+  const [skills, setSelectedSkills] = useState("");
+  const [education, setEducation] = useState([]);
+  const [foreignLanguages, setForeignLanguages] = useState([]);
+  const [employmentTypes, setSelectedEmpTypes] = useState([]);
+  const [about, setAbout] = useState("");
+
+  useEffect(() => {
     dispatch(getResumeById(id));
-  };
 
-  useEffect(didMount, []);
-  const birthday = new Date(resume.birthday);
+    console.log("didMount");
 
-  const russianMonths = [
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря",
-  ];
-  const russianMonths2 = [
-    "январь",
-    "февраль",
-    "март",
-    "апрель",
-    "май",
-    "июнь",
-    "июль",
-    "август",
-    "сентябрь",
-    "октябрь",
-    "ноябрь",
-    "декабрь",
-  ];
+    axios.get(`${END_POINT}/api/region/cities`).then((res) => {
+      setCities(res.data);
+    });
+    axios.get(`${END_POINT}/api/region/countries`).then((res) => {
+      setCountries(res.data);
+    });
 
-  let age = 0;
-  age = new Date().getTime() - birthday.getTime();
-  age = parseInt(age / (1000 * 60 * 60 * 24 * 365));
+    axios.get(`${END_POINT}/api/skills`).then((res) => {
+      setSkills(res.data);
+    });
+    axios.get(`${END_POINT}/api/employment-types`).then((res) => {
+      setEmploymentTypes(res.data);
+    });
+  }, []);
 
-  const showPhone = (phone) => {
-    let res = "";
-    if (phone[0] === "8") {
-      phone = "+7" + phone.slice(1, phone.length);
+  useEffect(() => {
+    if (resume.id) {
+      setCity(resume.city.id);
+      setSelectedEmpTypes(resume.employmentTypes.map((et) => et.id));
     }
-    res = `${phone.slice(0, 2)} (${phone.slice(2, 5)}) ${phone.slice(
-      5,
-      8
-    )}-${phone.slice(8, 10)}-${phone.slice(10, 12)}`;
-    return res;
+  }, [resume]);
+
+  const closeModalExp = () => {
+    setModalExpIsOpen(false);
   };
-  let skills = [];
-  if (resume.skills) {
-    skills = resume.skills.split(",");
-  }
+
+  const addWorkingHistory = (item) => {
+    setWorkingHistories([...workingHistories, item]);
+    closeModalExp();
+  };
+
+  const removeWorkingHistory = (workingHistory) => {
+    let wh = [...workingHistories];
+    let index = workingHistories.indexOf(workingHistory);
+    wh.splice(index, 1);
+    setWorkingHistories(wh);
+  };
+
+  const handleGenderChange = (e) => {
+    setGender(e.target.value);
+  };
+  const onSkillsChange = (data) => {
+    const arr = data.map((item) => item.name);
+    setSelectedSkills(arr.join(","));
+  };
+
+  const handleSave = () => {
+    console.log(foreignLanguages, workingHistories, employmentTypes);
+    dispatch(
+      createResume(
+        {
+          first_name,
+          last_name,
+          phone,
+          cityId,
+          birthday,
+          gender,
+          citizenship,
+          position,
+          about,
+          salary,
+          salary_type,
+          workingHistories,
+          skills,
+          education,
+          employmentTypes,
+          foreignLanguages,
+          main_language: "",
+        },
+        router
+      )
+    );
+  };
+
   return (
     <main>
       <Header />
-      <div className="container">
-        <div className="flex flex-ai-c flex-jc-sb ptb7">
-          <Link className="link" href="/resumes">
-            К списку резюме
-          </Link>
-          <Link
-            className="button button-secondary-bordered"
-            href={`/edit-resume/${resume.id}`}
-          >
-            Редактировать
-          </Link>
-        </div>
-        <h1>
-          {resume.first_name} {resume.last_name}
-        </h1>
-        <p>
-          {resume.gender} {age} лет, родился {birthday.getDate()}{" "}
-          {russianMonths[birthday.getMonth()]} {birthday.getFullYear()}{" "}
-        </p>
-        <p className="secondary">Контакты</p>
-        <p>{resume.phone && showPhone(resume.phone)}</p>
-        <p>{resume.email}</p>
-        <p>Место проживания: {resume.city && resume.city.name}</p>
-        <div className="flex flex-jc-sb">
-          <div>
-            <h1>{resume.position}</h1>
-            <p>
-              Занятость:{" "}
-              {resume.employmentTypes &&
-                resume.employmentTypes.map((et) => `${et.name} `)}
-            </p>
+      <div className="container p7">
+        <h1>Ваше резюме</h1>
+
+        <h3>Контакные данные</h3>
+        <Input
+          placeholder=""
+          type="text"
+          label="Имя"
+          size="fieldset-md"
+          onChange={(e) => setName(e.target.value)}
+        />
+        <Input
+          placeholder=""
+          type="text"
+          label="Фамилия"
+          size="fieldset-md"
+          onChange={(e) => setSurname(e.target.value)}
+        />
+        <Input
+          placeholder=""
+          type="text"
+          label="Мобильный телефон"
+          size="fieldset-md"
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <AutoCompliteSelect
+          placeholder=""
+          type="text"
+          label="Город проживания"
+          size="fieldset-md"
+          items={cities}
+          onSelect={(data) => setCity(data.id)}
+        />
+
+        <h3>Основная информация</h3>
+
+        <SelectDate
+          size="fieldset-sm"
+          label="Дата рождения"
+          onChange={(date) => setBirthday(date)}
+        />
+        <fieldset className={"fieldset fieldset-sm"}>
+          <label>Пол</label>
+
+          <div className="radio-group">
+            <div className="radio">
+              <input
+                type="radio"
+                onChange={handleGenderChange}
+                name="gender"
+                id="g1"
+                value="Мужской"
+              />
+              <label for="g1">Мужской</label>
+            </div>
+            <div className="radio">
+              <input
+                type="radio"
+                onChange={handleGenderChange}
+                name="gender"
+                id="g2"
+                value="Женский"
+              />
+              <label for="g2">Женский</label>
+            </div>
           </div>
-          <div>
-            <h1>
-              {resume.salary} {resume.salary_type}
-            </h1>
+        </fieldset>
+
+        <AutoCompliteSelect
+          placeholder=""
+          type="text"
+          label="Гражданство"
+          size="fieldset-md"
+          items={countries}
+          onSelect={(data) => setCitizenship(data.id)}
+        />
+
+        <h3>Специальность</h3>
+        <Input
+          placeholder=""
+          type="text"
+          label="Желаемая должность"
+          size="fieldset-lg"
+          onChange={(e) => setPosition(e.target.value)}
+        />
+
+        <fieldset className={"fieldset fieldset-lg"}>
+          <label>Зарплата</label>
+          <div className="salary">
+            <input
+              placeholder=""
+              type="number"
+              size="input"
+              value={salary}
+              onChange={(e) => setSalary(e.target.value * 1)}
+            />
+            <select
+              className="input"
+              value={salary_type}
+              onChange={(e) => setSalaryType(e.target.value)}
+            >
+              <option value="KZT">KZT</option>
+              <option value="USD">USD</option>
+              <option value="RUB">RUB</option>
+            </select>
+            на руки
           </div>
-        </div>
+        </fieldset>
 
         <h3>Опыт работы</h3>
+        {modalExpIsOpen && (
+          <ModalAddExp
+            close={closeModalExp}
+            addWorkingHistory={addWorkingHistory}
+          />
+        )}
+        <fieldset className={"fieldset fieldset-lg"}>
+          <label>Места работы</label>
+          <div className="exp">
+            {workingHistories.map((item) => (
+              <WorkingHistory
+                workingHistory={item}
+                remove={removeWorkingHistory}
+              />
+            ))}
+            <button
+              className="button button-primary-bordered"
+              onClick={() => setModalExpIsOpen(true)}
+            >
+              Добавить место работы
+            </button>
+          </div>
+        </fieldset>
 
-        {resume.workingHistories &&
-          resume.workingHistories.map((job) => {
-            let start = new Date(job.start_date);
-            let end = new Date(job.end_date);
-            return (
-              <div className="flex working-history">
-                <div className="working-history-date">
-                  {russianMonths2[start.getMonth()]} {start.getFullYear()} -{" "}
-                  {russianMonths2[end.getMonth()]} {end.getFullYear()}
-                </div>
-                <div className="working-history-info">
-                  <h4>{job.company_name}</h4>
-                  <h4>{job.company_description}</h4>
-                  <p>{job.responsibilities}</p>
-                </div>
-              </div>
-            );
-          })}
-        <h3>Ключевые навыки</h3>
-        {skills.map((skill) => (
-          <span className="tag mr-4">{skill}</span>
-        ))}
+        <fieldset className={"fieldset fieldset-lg"}>
+          <label>О себе</label>
+          <textarea
+            className="textarea"
+            placeholder="Расскажите о себе"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+          ></textarea>
+        </fieldset>
 
-        <h3>Обо мне</h3>
-        <p>{resume.about}</p>
+        <AutoCompliteTags
+          placeholder=""
+          type="text"
+          label="Ключевые навыки"
+          size="fieldset-md"
+          items={allSkills}
+          onSelect={onSkillsChange}
+        />
 
-        <h3>Высшее образование</h3>
-        {resume.education &&
-          resume.education.map((ed) => {
-            let end = new Date(ed.end_date);
-            return (
-              <div className="flex working-history">
-                <div className="working-history-date">{end.getFullYear()}</div>
-                <div className="working-history-info">
-                  <h4>{ed.university_name}</h4>
-                  <p>{ed.major}</p>
-                </div>
-              </div>
-            );
-          })}
+        <h3>Образование</h3>
+        <AddEducation onChange={(eds) => setEducation(eds)} />
 
-        <h3>Знание языков</h3>
-        {resume.foreignLanguages &&
-          resume.foreignLanguages.map((fl) => (
-            <p className="tag mr-4">
-              {fl.name} - {fl.level}
-            </p>
-          ))}
+        <h3>Владение языками</h3>
 
-<h3>Гражданство</h3>
-<p>{resume.citizenshipObj && resume.citizenshipObj.name}</p>
+        <AddLang
+          onChange={(lns) => {
+            setForeignLanguages(lns);
+          }}
+        />
+
+        <h3>Другая важная информация</h3>
+
+        <SelectEmploymentTypes
+          label="Занятость"
+          employmentTypes={allEmploymentTypes}
+          onChange={(tps) => setSelectedEmpTypes(tps)}
+          size="fieldset-md"
+        />
+        <button className="button button-primary" onClick={handleSave}>
+          Сохранить и опубликовать
+        </button>
       </div>
     </main>
   );

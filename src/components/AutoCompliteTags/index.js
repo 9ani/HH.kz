@@ -8,6 +8,7 @@ export default function AutoCompliteTags({
   size,
   items,
   onSelect,
+  selected,
 }) {
   const [value, setValue] = useState([]);
   const [input, setInput] = useState("");
@@ -26,8 +27,14 @@ export default function AutoCompliteTags({
     setFilteredItems([...filteredItems, value]);
   };
 
+  useEffect(() => {
+    if (JSON.stringify(value) !== JSON.stringify(selected)) {
+      setValue(selected);
+    }
+  }, [selected]);
+
   const onChange = (e) => {
-    setInput(e.target.value)
+    setInput(e.target.value);
     if (e.target.value === "") {
       setFilteredItems([]);
     } else {
@@ -36,6 +43,7 @@ export default function AutoCompliteTags({
       let fi = [];
       filter.map((item) => {
         let exist = false;
+        console.log(value);
         value.map((tag) => {
           if (tag.name === item.name) {
             exist = true;
@@ -66,10 +74,10 @@ export default function AutoCompliteTags({
     onSelect(value);
   }, [value]);
 
-  useEffect(() => {
-    console.log(items);
-    console.log(filteredItems);
-  }, [items, filteredItems]);
+  // useEffect(() => {
+  //   console.log(items);
+  //   console.log(filteredItems);
+  // }, [items, filteredItems]);
 
   return (
     <div className="fieldset-lg">
@@ -77,7 +85,7 @@ export default function AutoCompliteTags({
         {value.length > 0 &&
           value.map((tag, index) => (
             <div className="tag" key={index}>
-              <span>{tag.name} </span>
+              <span>{tag && tag.name} </span> {/* Add a null check */}
               <i onClick={() => deleteTag(tag)}>X</i>
             </div>
           ))}

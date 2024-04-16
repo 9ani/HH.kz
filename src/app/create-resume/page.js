@@ -83,10 +83,8 @@ export default function CreateResume() {
     setSelectedSkills(arr.join(","));
   };
 
-  
-
   const handleSave = () => {
-    console.log(foreignLanguages,workingHistories,employmentTypes );
+    console.log(foreignLanguages, workingHistories, employmentTypes);
     dispatch(
       createResume(
         {
@@ -101,12 +99,12 @@ export default function CreateResume() {
           about,
           salary,
           salary_type,
-          workingHistories, 
+          workingHistories,
           skills,
-          education, 
+          education,
           employmentTypes,
-          foreignLanguages, 
-          main_language : ""
+          foreignLanguages,
+          main_language: "",
         },
         router
       )
@@ -267,10 +265,11 @@ export default function CreateResume() {
           size="fieldset-md"
           items={allSkills}
           onSelect={onSkillsChange}
+          selected={[]}
         />
 
         <h3>Образование</h3>
-        <AddEducation onChange={(eds) => setEducation(eds)} />
+        <AddEducation onChange={(eds) => setEducation(eds)} education={[]} />
 
         <h3>Владение языками</h3>
 
@@ -278,15 +277,17 @@ export default function CreateResume() {
           onChange={(lns) => {
             setForeignLanguages(lns);
           }}
+          foreignLanguages={[]}
         />
 
         <h3>Другая важная информация</h3>
 
         <SelectEmploymentTypes
           label="Занятость"
-          employmentTypes={allEmploymentTypes}
+          allEmploymentTypes={allEmploymentTypes}
           onChange={(tps) => setSelectedEmpTypes(tps)}
           size="fieldset-md"
+          employmentTypes={[]}
         />
         <button className="button button-primary" onClick={handleSave}>
           Сохранить и опубликовать

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function AddEducation({ onChange }) {
-  const [education, setEducation] = useState([]);
+export default function AddEducation({ onChange, education }) {
 
   const onChangeData = (e) => {
     let [index, name] = e.target.name.split("-");
@@ -9,11 +8,11 @@ export default function AddEducation({ onChange }) {
 
     let ed = [...education];
     ed[index][name] = e.target.value;
-    setEducation(ed);
+    onChange(ed);
   };
 
   const newEducation = () => {
-    setEducation([
+    onChange([
       ...education,
       {
         level: "Высшее",
@@ -29,12 +28,10 @@ export default function AddEducation({ onChange }) {
     const eds = [...education];
     const index = education.indexOf(ed);
     eds.splice(index, 1);
-    setEducation(eds);
+    onChange(eds);
   };
 
-  useEffect(() => {
-    onChange(education);
-  }, [education]);
+
   const educations = education.map((ed, index) => (
     <div key={index} className="education">
       <sapn onClick={() => removeEd(ed)}>X</sapn>

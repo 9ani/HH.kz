@@ -14,7 +14,7 @@ import AddLang from "@/components/AddLang";
 import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
 import { useRouter, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { createResume, getResumeById } from "@/app/store/slices/resumeSlice";
+import { editResume, getResumeById } from "@/app/store/slices/resumeSlice";
 
 export default function CreateResume() {
   const router = useRouter();
@@ -67,6 +67,19 @@ export default function CreateResume() {
     if (resume.id) {
       setCity(resume.city.id);
       setSelectedEmpTypes(resume.employmentTypes.map((et) => et.id));
+      setName(resume.first_name);
+      setSurname(resume.last_name);
+      setGender(resume.gender);
+      setPhone(resume.phone);
+      setCitizenship(resume.citizenship);
+      setPosition(resume.position);
+      setSalary(resume.salary);
+      setWorkingHistories(resume.workingHistories);
+      setSalaryType(resume.salary_type);
+      setAbout(resume.about);
+      setSelectedSkills(resume.skills);
+      setEducation(resume.education);
+      setForeignLanguages(resume.foreignLanguages)
     }
   }, [resume]);
 
@@ -97,8 +110,9 @@ export default function CreateResume() {
   const handleSave = () => {
     console.log(foreignLanguages, workingHistories, employmentTypes);
     dispatch(
-      createResume(
+      editResume(
         {
+          id:resume.id,
           first_name,
           last_name,
           phone,
@@ -122,6 +136,14 @@ export default function CreateResume() {
     );
   };
 
+  let eds = education.map(ed=>{
+    const end = new Date(ed.end_date)
+    return{
+    ...ed,
+    end_date: end.getFullYear()
+    }
+  })
+
   return (
     <main>
       <Header />
@@ -135,6 +157,7 @@ export default function CreateResume() {
           label="Имя"
           size="fieldset-md"
           onChange={(e) => setName(e.target.value)}
+          value={first_name}
         />
         <Input
           placeholder=""
@@ -142,6 +165,7 @@ export default function CreateResume() {
           label="Фамилия"
           size="fieldset-md"
           onChange={(e) => setSurname(e.target.value)}
+          value={last_name}
         />
         <Input
           placeholder=""
@@ -149,6 +173,7 @@ export default function CreateResume() {
           label="Мобильный телефон"
           size="fieldset-md"
           onChange={(e) => setPhone(e.target.value)}
+          value={phone}
         />
         <AutoCompliteSelect
           placeholder=""
@@ -157,6 +182,7 @@ export default function CreateResume() {
           size="fieldset-md"
           items={cities}
           onSelect={(data) => setCity(data.id)}
+          selected={cityId}
         />
 
         <h3>Основная информация</h3>
@@ -165,29 +191,58 @@ export default function CreateResume() {
           size="fieldset-sm"
           label="Дата рождения"
           onChange={(date) => setBirthday(date)}
+          value={resume.birthday}
         />
         <fieldset className={"fieldset fieldset-sm"}>
           <label>Пол</label>
 
           <div className="radio-group">
             <div className="radio">
-              <input
-                type="radio"
-                onChange={handleGenderChange}
-                name="gender"
-                id="g1"
-                value="Мужской"
-              />
+              {resume.gender && resume.gender === "Мужской" && (
+                <input
+                  type="radio"
+                  onChange={handleGenderChange}
+                  name="gender"
+                  id="g1"
+                  value="Мужской"
+                  checked
+                />
+              )}
+              {!resume.gender ||
+                (resume.gender !== "Мужской" && (
+                  <input
+                    type="radio"
+                    onChange={handleGenderChange}
+                    name="gender"
+                    id="g1"
+                    value="Мужской"
+                  />
+                ))}
+
               <label for="g1">Мужской</label>
             </div>
             <div className="radio">
-              <input
-                type="radio"
-                onChange={handleGenderChange}
-                name="gender"
-                id="g2"
-                value="Женский"
-              />
+              {resume.gender && resume.gender === "Женский" && (
+                <input
+                  type="radio"
+                  onChange={handleGenderChange}
+                  name="gender"
+                  id="g2"
+                  value="Женский"
+                  checked
+                />
+              )}
+              {!resume.gender ||
+                (resume.gender !== "Женский" && (
+                  <input
+                    type="radio"
+                    onChange={handleGenderChange}
+                    name="gender"
+                    id="g2"
+                    value="Женский"
+                  />
+                ))}
+
               <label for="g2">Женский</label>
             </div>
           </div>
@@ -200,6 +255,7 @@ export default function CreateResume() {
           size="fieldset-md"
           items={countries}
           onSelect={(data) => setCitizenship(data.id)}
+          selected={citizenship}
         />
 
         <h3>Специальность</h3>
@@ -209,6 +265,7 @@ export default function CreateResume() {
           label="Желаемая должность"
           size="fieldset-lg"
           onChange={(e) => setPosition(e.target.value)}
+          value={position}
         />
 
         <fieldset className={"fieldset fieldset-lg"}>
@@ -276,10 +333,14 @@ export default function CreateResume() {
           size="fieldset-md"
           items={allSkills}
           onSelect={onSkillsChange}
+          selected={skills.split(",").map((item) => ({ name: item }))}
         />
 
         <h3>Образование</h3>
-        <AddEducation onChange={(eds) => setEducation(eds)} />
+        <AddEducation
+          onChange={(eds) => setEducation(eds)}
+          education={eds}
+        />
 
         <h3>Владение языками</h3>
 
@@ -287,15 +348,17 @@ export default function CreateResume() {
           onChange={(lns) => {
             setForeignLanguages(lns);
           }}
+          foreignLanguages={foreignLanguages}
         />
 
         <h3>Другая важная информация</h3>
 
         <SelectEmploymentTypes
           label="Занятость"
-          employmentTypes={allEmploymentTypes}
+          allEmploymentTypes={allEmploymentTypes}
           onChange={(tps) => setSelectedEmpTypes(tps)}
           size="fieldset-md"
+          employmentTypes={employmentTypes}
         />
         <button className="button button-primary" onClick={handleSave}>
           Сохранить и опубликовать

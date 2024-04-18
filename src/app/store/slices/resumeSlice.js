@@ -18,10 +18,16 @@ export const resumeSlice = createSlice({
     setResume: (state, action) => {
       state.resume = action.payload.resume;
     },
+    handleDeleteResume: (state, action) => {
+      let resumes = [...state.resumes];
+      resumes = resumes.filter((item) => item.id !== action.payload);
+      state.resumes = resumes;
+    },
   },
 });
 
-export const { setMyResumes, uppendResume, setResume } = resumeSlice.actions;
+export const { setMyResumes, uppendResume, setResume, handleDeleteResume } =
+  resumeSlice.actions;
 
 export const getMyResumes = () => async (dispatch) => {
   try {
@@ -57,6 +63,13 @@ export const editResume = (sendData, router) => async (dispatch) => {
     alert("Something went wrong, Try later!");
   }
 };
-
+export const deleteResume = (id) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`${END_POINT}/api/resume/${id}`);
+    dispatch(handleDeleteResume(id));
+  } catch (e) {
+    alert("Something went wrong, Try later!");
+  }
+};
 
 export default resumeSlice.reducer;

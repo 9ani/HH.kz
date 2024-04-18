@@ -167,7 +167,7 @@ export default function CreateResume() {
                 id="g1"
                 value="Мужской"
               />
-              <label for="g1">Мужской</label>
+              <label htmlFor="g1">Мужской</label>
             </div>
             <div className="radio">
               <input
@@ -177,7 +177,7 @@ export default function CreateResume() {
                 id="g2"
                 value="Женский"
               />
-              <label for="g2">Женский</label>
+              <label htmlFor="g2">Женский</label>
             </div>
           </div>
         </fieldset>

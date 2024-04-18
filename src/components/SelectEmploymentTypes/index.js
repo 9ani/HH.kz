@@ -33,7 +33,7 @@ export default function SelectEmploymentTypes({
       <div>
         {allEmploymentTypes.map((type, index) => (
           <div key={index} className="checkbox">
-            {employmentTypes.includes(type.id) && 
+            {employmentTypes.includes(type.id) && (
               <input
                 type="checkbox"
                 name="employmentTypes"
@@ -42,8 +42,8 @@ export default function SelectEmploymentTypes({
                 onChange={onSelect}
                 checked
               />
-            }
-            {!employmentTypes.includes(type.id) && 
+            )}
+            {!employmentTypes.includes(type.id) && (
               <input
                 type="checkbox"
                 name="employmentTypes"
@@ -51,9 +51,9 @@ export default function SelectEmploymentTypes({
                 id={type.id + "-type"}
                 onChange={onSelect}
               />
-            }
+            )}
 
-            <label for="">{type.name}</label>
+            <label htmlFor="">{type.name}</label>
           </div>
         ))}
       </div>

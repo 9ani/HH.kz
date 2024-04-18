@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { END_POINT } from "@/config/end-point";
-const token = localStorage.getItem("token");
+const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
 let initialState = {
   isAuth: false,
   currentUser: null,

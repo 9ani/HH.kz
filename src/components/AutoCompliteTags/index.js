@@ -84,7 +84,7 @@ export default function AutoCompliteTags({
       <div className="tags">
         {value.length > 0 &&
           value.map((tag, index) => (
-            <div className="tag" key={index}>
+            <div className="tag" key={Math.random()}>
               <span>{tag && tag.name} </span> {/* Add a null check */}
               <i onClick={() => deleteTag(tag)}>X</i>
             </div>
@@ -103,7 +103,9 @@ export default function AutoCompliteTags({
         {filteredItems.length > 0 && (
           <div className="dropdown dropdown-tags">
             {filteredItems.map((item) => (
-              <a onClick={() => onClick(item)}>{item.name}</a>
+              <a onClick={() => onClick(item)} key={Math.random()}>
+                {item.name}
+              </a>
             ))}
           </div>
         )}

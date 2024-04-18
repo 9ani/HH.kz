@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
 export default function AddEducation({ onChange, education }) {
-
   const onChangeData = (e) => {
     let [index, name] = e.target.name.split("-");
     index = index * 1;
@@ -30,7 +29,6 @@ export default function AddEducation({ onChange, education }) {
     eds.splice(index, 1);
     onChange(eds);
   };
-
 
   const educations = education.map((ed, index) => (
     <div key={index} className="education">

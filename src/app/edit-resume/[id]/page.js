@@ -79,7 +79,7 @@ export default function CreateResume() {
       setAbout(resume.about);
       setSelectedSkills(resume.skills);
       setEducation(resume.education);
-      setForeignLanguages(resume.foreignLanguages)
+      setForeignLanguages(resume.foreignLanguages);
     }
   }, [resume]);
 
@@ -112,7 +112,7 @@ export default function CreateResume() {
     dispatch(
       editResume(
         {
-          id:resume.id,
+          id: resume.id,
           first_name,
           last_name,
           phone,
@@ -136,13 +136,13 @@ export default function CreateResume() {
     );
   };
 
-  let eds = education.map(ed=>{
-    const end = new Date(ed.end_date)
-    return{
-    ...ed,
-    end_date: end.getFullYear()
-    }
-  })
+  let eds = education.map((ed) => {
+    const end = new Date(ed.end_date);
+    return {
+      ...ed,
+      end_date: end.getFullYear(),
+    };
+  });
 
   return (
     <main>
@@ -219,7 +219,7 @@ export default function CreateResume() {
                   />
                 ))}
 
-              <label for="g1">Мужской</label>
+              <label htmlFor="g1">Мужской</label>
             </div>
             <div className="radio">
               {resume.gender && resume.gender === "Женский" && (
@@ -243,7 +243,7 @@ export default function CreateResume() {
                   />
                 ))}
 
-              <label for="g2">Женский</label>
+              <label htmlFor="g2">Женский</label>
             </div>
           </div>
         </fieldset>
@@ -339,7 +339,7 @@ export default function CreateResume() {
         <h3>Образование</h3>
         <AddEducation
           onChange={(eds) => setEducation(eds)}
-          education={eds}
+          education={education}
         />
 
         <h3>Владение языками</h3>

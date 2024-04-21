@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { END_POINT } from "@/config/end-point";
-const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") : null;
 let initialState = {
   isAuth: false,
   currentUser: null,
@@ -34,6 +35,7 @@ export const authSlice = createSlice({
     isAuth: false,
     currentUser: null,
     tokenExt: 0,
+    error: null
   },
   reducers: {
     authorize: (state, action) => {
@@ -60,10 +62,14 @@ export const authSlice = createSlice({
       state.exp = 0;
       localStorage.removeItem("token");
     },
+    setError:(state, action) =>{
+      state.error = action.payload
+    }
   },
+  
 });
 
-export const { authorize, logOut } = authSlice.actions;
+export const { authorize, logOut, setError } = authSlice.actions;
 
 export const sendVerificationEmail = (email) => (dispatch) => {
   axios.post(`${END_POINT}/api/auth/sendmail`, {
@@ -79,6 +85,30 @@ export const verifyCode = (email, code) => (dispatch) => {
     })
     .then((res) => {
       dispatch(authorize(res.data));
+    });
+};
+
+export const signUp = (data, router) => (dispatch) => {
+  const fd = new FormData();
+  fd.append("full_name", data.full_name);
+  fd.append("email", data.email);
+  fd.append("password", data.password);
+  fd.append("password2", data.password2);
+  fd.append("company_name", data.company_name);
+  fd.append("company_description", data.company_description);
+  fd.append("company_address", data.company_address);
+  fd.append("company_logo", data.company_logo);
+
+
+  axios
+    .post(`${END_POINT}/api/auth/signup`, {
+      fd,
+    })
+    .then((res) => {
+      router.push("/employer/signin"
+      )
+    }).catch(e=>{
+        dispatch(setError(e.response.data))
     });
 };
 export default authSlice.reducer;

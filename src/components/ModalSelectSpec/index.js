@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import SpecType from "./SpecType";
 
 export default function ModalSelectSpec({ close, onChange }) {
   const [search, setSearch] = useState("");
@@ -18,7 +19,7 @@ export default function ModalSelectSpec({ close, onChange }) {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        
+        {specializationTypes.map(specType => <SpecType specType={specType}/>)}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getSpecializations } from "../store/slices/vacancySlice";
+import ModalSelectSpec from "@/components/ModalSelectSpec";
 export default function CreateVacancy() {
   const [name, setName] = useState("");
   const [specialization, setSpecialization] = useState()
@@ -32,7 +33,7 @@ export default function CreateVacancy() {
         </fieldset>
         <fieldset className="fieldset-vertical">
           <label>Указать специализацию</label>
-          <p className="link" onClick={setSpecModalOpen(true)}>Указать специализацию</p>
+          <p className="link" onClick={()=>setSpecModalOpen(true)}>Указать специализацию</p>
         </fieldset>
 
         {isSpecModalOpen && (

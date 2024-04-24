@@ -1,14 +1,15 @@
 "use client";
 import logo from "@/app/images/logo.svg";
 import Image from "next/image";
-import { setError } from "@/app/store/slices/authSlice";
+import { setError, signIn } from "@/app/store/slices/authSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 export default function EmployerSignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
   const dispatch = useDispatch();
   const error = useSelector((state) => state.auth.error);
   useEffect(() => {
@@ -17,7 +18,9 @@ export default function EmployerSignIn() {
     };
   }, []);
 
-  const handleSignIn = () => {};
+  const handleSignIn = () => {
+    dispatch(signIn({ email, password }, router));
+  };
 
   return (
     <main className="bg">
@@ -49,7 +52,11 @@ export default function EmployerSignIn() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button className="button button-primary" onClick={handleSignIn}>
+              <button
+                className="button button-primary"
+                type="button"
+                onClick={handleSignIn}
+              >
                 Войти
               </button>
             </form>

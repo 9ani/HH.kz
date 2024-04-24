@@ -35,7 +35,7 @@ export const authSlice = createSlice({
     isAuth: false,
     currentUser: null,
     tokenExt: 0,
-    error: null
+    error: null,
   },
   reducers: {
     authorize: (state, action) => {
@@ -62,11 +62,10 @@ export const authSlice = createSlice({
       state.exp = 0;
       localStorage.removeItem("token");
     },
-    setError:(state, action) =>{
-      state.error = action.payload
-    }
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
   },
-  
 });
 
 export const { authorize, logOut, setError } = authSlice.actions;
@@ -89,6 +88,7 @@ export const verifyCode = (email, code) => (dispatch) => {
 };
 
 export const signUp = (data, router) => (dispatch) => {
+  console.log(data);
   const fd = new FormData();
   fd.append("full_name", data.full_name);
   fd.append("email", data.email);
@@ -98,17 +98,35 @@ export const signUp = (data, router) => (dispatch) => {
   fd.append("company_description", data.company_description);
   fd.append("company_address", data.company_address);
   fd.append("company_logo", data.company_logo);
-
-
+  for (const pair of fd.entries()) {
+    console.log(`${pair[0]}: ${pair[1]}`);
+  }
   axios
-    .post(`${END_POINT}/api/auth/signup`, {
-      fd,
+    .post(`${END_POINT}/api/auth/signup`, fd)
+    .then((res) => {
+      router.push("/employer/signin");
+    })
+    .catch((e) => {
+      if (e.response && e.response.data) {
+        dispatch(setError(e.response.data));
+      }
+    });
+};
+export const signIn = (data, router) => (dispatch) => {
+  axios
+    .post(`${END_POINT}/api/auth/login`, {
+      data,
     })
     .then((res) => {
-      router.push("/employer/signin"
-      )
-    }).catch(e=>{
-        dispatch(setError(e.response.data))
+      dispatch(authorize(res.data));
+
+      router.push("/vacancy");
+    })
+    .catch((e) => {
+      console.log(e);
+      if (e.response && e.response.data) {
+        dispatch(setError(e.response.data));
+      }
     });
 };
 export default authSlice.reducer;

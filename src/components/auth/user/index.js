@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   authorize,
   sendVerificationEmail,
@@ -71,9 +72,9 @@ export default function UserLogin() {
         <div className="card">
           <h1>Поиск сотрудников</h1>
           <p>Размещение вакансий и доступ к базе резюме</p>
-          <button className="button button-primary-bordered">
+          <Link className="button button-primary-bordered" href="/employer/signin">
             Я ищу сотрудников
-          </button>
+          </Link>
         </div>
       )}
 

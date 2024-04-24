@@ -4,7 +4,8 @@ import Image from "next/image";
 import { signUp, setError } from "@/app/store/slices/authSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function EmployerSignUp() {
   const [step, setStep] = useState(1);
@@ -28,21 +29,27 @@ export default function EmployerSignUp() {
 
   const handleSignup = () => {
     dispatch(
-      signUp({
-        email,
-        full_name: `${first_name} ${last_name} `,
-        company_name,
-        company_description,
-        company_address,
-        company_logo,
-        password,
-        password2,
-      }, router)
+      signUp(
+        {
+          email,
+          full_name: `${first_name} ${last_name} `,
+          company_name,
+          company_description,
+          company_address,
+          company_logo,
+          password,
+          password2,
+        },
+        router
+      )
     );
   };
 
   const onLogoChange = (e) => {
-    setCompanyLogo(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setCompanyLogo(file); // Assuming `companyLogo` is a state variable
+    }
   };
 
   return (

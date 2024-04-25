@@ -7,7 +7,7 @@ import { getSpecializations } from "../store/slices/vacancySlice";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 export default function CreateVacancy() {
   const [name, setName] = useState("");
-  const [specialization, setSpecialization] = useState();
+  const [specializationId, setSpecializationId] = useState();
   const [isSpecModalOpen, setSpecModalOpen] = useState(false);
   const dispatch = useDispatch();
   const closeSpecModal = () => {
@@ -16,6 +16,10 @@ export default function CreateVacancy() {
   useEffect(() => {
     dispatch(getSpecializations());
   }, []);
+
+  const handleOnSpecChange = (e) =>{
+    setSpecializationId(e.target.value * 1)
+  }
   return (
     <main>
       <Header />
@@ -43,7 +47,8 @@ export default function CreateVacancy() {
         {isSpecModalOpen && (
           <ModalSelectSpec
             close={closeSpecModal}
-            onChange={(spec) => setSpecialization(spec)}
+            onChange={handleOnSpecChange}
+            value={specializationId}
           />
         )}
       </div>

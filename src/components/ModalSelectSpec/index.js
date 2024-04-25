@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import SpecType from "./SpecType";
 
-export default function ModalSelectSpec({ close, onChange }) {
+export default function ModalSelectSpec({ close, onChange, value }) {
   const [search, setSearch] = useState("");
   // const vacancyState = useSelector((state) => state.vacancy);
   // console.log("Vacancy state:", vacancyState); // Verify the state structure
@@ -23,7 +23,8 @@ export default function ModalSelectSpec({ close, onChange }) {
           onChange={(e) => setSearch(e.target.value)}
         />
         {specializationTypes.map((specType) => (
-          <SpecType key={specType.id} specType={specType} />
+          <SpecType key={specType.id} specType={specType} onChange={onChange} value={value}
+           />
         ))}
       </div>
     </div>

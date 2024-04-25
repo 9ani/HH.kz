@@ -6,6 +6,6 @@ export default configureStore({
   reducer: {
     auth: authReducer,
     resume: resumeReducer,
-    Vacancy: vacancyReducer
+    vacancy: vacancyReducer
   },
 })

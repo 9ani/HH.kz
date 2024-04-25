@@ -7,7 +7,7 @@ export const vacancySlice = createSlice({
   initialState: {
     vacancies: [],
     vacancy: {},
-    specializations: []
+    specializations: [],
   },
   reducers: {
     setMyVacancies: (state, action) => {
@@ -46,11 +46,13 @@ export const getMyVacancies = () => async (dispatch) => {
 export const getSpecializations = () => async (dispatch) => {
   try {
     const res = await axios.get(`${END_POINT}/api/specializations`);
-    dispatch(setSpecializations( res.data ));
+    console.log("Fetched specializations:", res.data); // Check the fetched data
+    dispatch(setSpecializations(res.data));
   } catch (e) {
-    alert("Something went wrong, Try later!");
+    console.error("Error fetching specializations:", e);
   }
 };
+
 
 export const getVacancyById = (id) => async (dispatch) => {
   try {

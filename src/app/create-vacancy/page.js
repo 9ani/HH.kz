@@ -1,19 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import Header from "@/components/header";
 import { useDispatch } from "react-redux";
 import { getSpecializations } from "../store/slices/vacancySlice";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 export default function CreateVacancy() {
   const [name, setName] = useState("");
-  const [specialization, setSpecialization] = useState()
-  const [isSpecModalOpen, setSpecModalOpen] = useState(false)
-  const dispatch = useDispatch()
-  const closeSpecModal =()=>{
-    setSpecModalOpen(false)
-  }
-  useEffect =(()=>{
-      dispatch(getSpecializations())
-  }, [])
+  const [specialization, setSpecialization] = useState();
+  const [isSpecModalOpen, setSpecModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const closeSpecModal = () => {
+    setSpecModalOpen(false);
+  };
+  useEffect(() => {
+    dispatch(getSpecializations());
+  }, []);
   return (
     <main>
       <Header />
@@ -33,13 +35,15 @@ export default function CreateVacancy() {
         </fieldset>
         <fieldset className="fieldset-vertical">
           <label>Указать специализацию</label>
-          <p className="link" onClick={()=>setSpecModalOpen(true)}>Указать специализацию</p>
+          <p className="link" onClick={() => setSpecModalOpen(true)}>
+            Указать специализацию
+          </p>
         </fieldset>
 
         {isSpecModalOpen && (
           <ModalSelectSpec
             close={closeSpecModal}
-            onChange={spec => setSpecialization(spec)}
+            onChange={(spec) => setSpecialization(spec)}
           />
         )}
       </div>

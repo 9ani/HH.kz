@@ -17,9 +17,9 @@ export default function CreateVacancy() {
     dispatch(getSpecializations());
   }, []);
 
-  const handleOnSpecChange = (e) =>{
-    setSpecializationId(e.target.value * 1)
-  }
+  const handleOnSpecChange = (e) => {
+    setSpecializationId(e.target.value * 1);
+  };
   return (
     <main>
       <Header />
@@ -51,6 +51,15 @@ export default function CreateVacancy() {
             value={specializationId}
           />
         )}
+
+        <AutoCompliteSelect
+          placeholder=""
+          type="text"
+          label="Гражданство"
+          size="fieldset-md"
+          items={countries}
+          onSelect={(data) => setCitizenship(data.id)}
+        />
       </div>
     </main>
   );

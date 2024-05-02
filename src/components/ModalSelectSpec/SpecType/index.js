@@ -16,7 +16,7 @@ export default function SpecType({ specType, onChange , value}) {
       <Image alt="arrow" src={arrowRight} />
       {specType.name}
       </div>
-      {active && specType.specializations.map((spec) => <Spec spec={spec} onChange={onChange}/>)}
+      {active && specType.specializations.map((spec) => <Spec spec={spec} onChange={onChange} value={value}/>)}
     </div>
   );
 }

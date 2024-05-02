@@ -17,18 +17,19 @@ export default function ModalSelectSpec({ close, onChange, value }) {
     setSearch(e.target.value)
     let types = [...specializationTypes]
     types = types.filter(item => {
-      for(let i = 0; i<specializations.length; i++){
+      for(let i = 0; i< item.specializations.length; i++){
         if(item.specializations[i].name.includes(e.target.value)){
           return item
         }
       }
-      setFilteredSpecTypes(types)
     })
+    setFilteredSpecTypes(types)
+
   }
 
-  useEffect((
-    setFilteredSpecTypes(specializationTypes)
-  ), [specializationTypes])
+  useEffect(() => {
+    setFilteredSpecTypes(specializationTypes); 
+  }, [specializationTypes]);
   return (
     <div className="modal">
       <div className="modal-backdrop" onClick={close}></div>

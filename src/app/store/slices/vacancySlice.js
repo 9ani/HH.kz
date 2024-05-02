@@ -8,6 +8,7 @@ export const vacancySlice = createSlice({
     vacancies: [],
     vacancy: {},
     specializations: [],
+    cities: [],
   },
   reducers: {
     setMyVacancies: (state, action) => {
@@ -25,14 +26,22 @@ export const vacancySlice = createSlice({
       state.vacancies = vacancies;
     },
     setSpecializations: (state, action) => {
-      state.specializations = action.payload
-
+      state.specializations = action.payload;
+    },
+    setCities: (state, action) => {
+      state.cities = action.payload;
     },
   },
 });
 
-export const { setMyVacancies, uppendVacancy, setVacancy, handleDeleteVacancy, setSpecializations } =
-  vacancySlice.actions;
+export const {
+  setMyVacancies,
+  uppendVacancy,
+  setVacancy,
+  handleDeleteVacancy,
+  setSpecializations,
+  setCities,
+} = vacancySlice.actions;
 
 export const getMyVacancies = () => async (dispatch) => {
   try {
@@ -53,11 +62,19 @@ export const getSpecializations = () => async (dispatch) => {
   }
 };
 
+export const getCities = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`${END_POINT}/api/region/cities`);
+    dispatch(setCities(res.data));
+  } catch (e) {
+    console.error("Error fetching specializations:", e);
+  }
+};
 
 export const getVacancyById = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`${END_POINT}/api/vacancy/${id}`);
-    dispatch(setVacancy(res.data ));
+    dispatch(setVacancy(res.data));
   } catch (e) {
     alert("Something went wrong, Try later!");
   }

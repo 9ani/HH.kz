@@ -103,7 +103,7 @@ export default function AutoCompliteTags({
         {filteredItems.length > 0 && (
           <div className="dropdown dropdown-tags">
             {filteredItems.map((item) => (
-              <a onClick={() => onClick(item)} key={Math.random()}>
+              <a onClick={() => onClick(item)} key={item.id}>
                 {item.name}
               </a>
             ))}

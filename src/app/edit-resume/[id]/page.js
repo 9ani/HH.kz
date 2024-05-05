@@ -333,7 +333,11 @@ export default function CreateResume() {
           size="fieldset-md"
           items={allSkills}
           onSelect={onSkillsChange}
-          selected={skills.split(",").map((item) => ({ name: item }))}
+          selected={
+            skills.length > 0
+              ? skills.split(",").map((item) => ({ name: item }))
+              : []
+          }
         />
 
         <h3>Образование</h3>

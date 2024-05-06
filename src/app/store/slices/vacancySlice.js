@@ -17,9 +17,7 @@ export const vacancySlice = createSlice({
     setMyVacancies: (state, action) => {
       state.vacancies = action.payload.vacancies;
     },
-    uppendVacancy: (state, action) => {
-      state.vacancies = [...state.vacancies, action.payload.newvacancy];
-    },
+
     setVacancy: (state, action) => {
       state.vacancy = action.payload.vacancy;
     },
@@ -48,7 +46,6 @@ export const vacancySlice = createSlice({
 
 export const {
   setMyVacancies,
-  uppendVacancy,
   setVacancy,
   handleDeleteVacancy,
   setSpecializations,
@@ -125,8 +122,7 @@ export const getVacancyById = (id) => async (dispatch) => {
 export const createVacancy = (sendData, router) => async (dispatch) => {
   try {
     const res = await axios.post(`${END_POINT}/api/vacancy`, sendData);
-    router.push("/resumes");
-    dispatch(setMyVacancies({ vacancies: res.data }));
+    router.push("/vacancy");
   } catch (e) {
     alert("Something went wrong, Try later!");
   }

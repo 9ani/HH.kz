@@ -11,11 +11,13 @@ import {
   getExperiences,
   getSkills,
   getEmpType,
+  createVacancy,
 } from "../store/slices/vacancySlice";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
 import AutoCompliteTags from "@/components/AutoCompliteTags";
 import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
+import { useRouter } from "next/router";
 export default function CreateVacancy() {
   const [name, setName] = useState("");
   const [specializationId, setSpecializationId] = useState();
@@ -31,6 +33,7 @@ export default function CreateVacancy() {
   const [description, setDescription] = useState(
     "<h2>Обязанности</h2><ul><li></li><li></li></ul><h2>Требования</h2><ul><li></li><li></li></ul><h2>Условия</h2><ul><li></li><li></li></ul>"
   );
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const closeSpecModal = () => {
@@ -62,7 +65,27 @@ export default function CreateVacancy() {
     setSelectedSkills(arr.join(","));
   };
 
-  const handleSave = () => {};
+  const handleSave = () => {
+    dispatch(
+      createVacancy(
+        {
+          name,
+          specializationId,
+          cityId,
+          description,
+          employmentTypeId,
+          salary_from,
+          salary_to,
+          salary_type,
+          address,
+          experienceId,
+          skills,
+          about_company: "",
+        },
+        router
+      )
+    );
+  };
   return (
     <main>
       <Header />

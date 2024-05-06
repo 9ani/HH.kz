@@ -11,12 +11,10 @@ export default function AutoCompliteTags({
   selected,
 }) {
   const [value, setValue] = useState([]);
-  const [input, setInput] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
   const onClick = (item) => {
     setValue([...value, item]);
-    setInput("");
   };
   const deleteTag = (tag) => {
     let v = [...value];
@@ -34,7 +32,6 @@ export default function AutoCompliteTags({
   }, [selected]);
 
   const onChange = (e) => {
-    setInput(e.target.value);
     if (e.target.value === "") {
       setFilteredItems([]);
     } else {
@@ -97,7 +94,6 @@ export default function AutoCompliteTags({
           onChange={onChange}
           label={label}
           size={size}
-          value={input}
         />
 
         {filteredItems.length > 0 && (

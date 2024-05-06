@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { deleteResume } from "@/app/store/slices/resumeSlice";
+import { deleteVacancy } from "@/app/store/slices/vacancySlice";
 export default function MyVacancy({ item }) {
   const dispatch = useDispatch();
   return (
@@ -15,7 +15,7 @@ export default function MyVacancy({ item }) {
       <span
         className="deleteResume"
         onClick={() => {
-          dispatch(deleteResume(item.id));
+          dispatch(deleteVacancy(item.id));
         }}
       >
         Удалить

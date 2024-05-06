@@ -17,10 +17,11 @@ import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
 import AutoCompliteTags from "@/components/AutoCompliteTags";
 import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 export default function CreateVacancy() {
   const [name, setName] = useState("");
   const [specializationId, setSpecializationId] = useState();
+  const [specializationName, setSpecializationName] = useState();
   const [isSpecModalOpen, setSpecModalOpen] = useState(false);
   const [cityId, setCity] = useState();
   const [address, setAddress] = useState();
@@ -48,7 +49,9 @@ export default function CreateVacancy() {
   }, []);
 
   const handleOnSpecChange = (e) => {
+    setSpecializationName(e.target.dataset.name);
     setSpecializationId(e.target.value * 1);
+    closeSpecModal();
   };
 
   const cities = useSelector((state) => state.vacancy.cities);
@@ -70,8 +73,8 @@ export default function CreateVacancy() {
       createVacancy(
         {
           name,
-          specializationId,
-          cityId,
+          specializationId: `${specializationId}`,
+          cityId: `${cityId}`,
           description,
           employmentTypeId,
           salary_from,
@@ -106,6 +109,7 @@ export default function CreateVacancy() {
         </fieldset>
         <fieldset className="fieldset-vertical">
           <label>Указать специализацию</label>
+          {specializationName && <p>{specializationName}</p>}
           <p className="link" onClick={() => setSpecModalOpen(true)}>
             Указать специализацию
           </p>
@@ -115,7 +119,7 @@ export default function CreateVacancy() {
           <ModalSelectSpec
             close={closeSpecModal}
             onChange={handleOnSpecChange}
-            value={specializationId}
+            value={specializationId * 1}
           />
         )}
 

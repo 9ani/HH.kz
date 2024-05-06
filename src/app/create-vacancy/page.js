@@ -10,10 +10,12 @@ import {
   getSpecializations,
   getExperiences,
   getSkills,
+  getEmpType,
 } from "../store/slices/vacancySlice";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
 import AutoCompliteTags from "@/components/AutoCompliteTags";
+import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
 export default function CreateVacancy() {
   const [name, setName] = useState("");
   const [specializationId, setSpecializationId] = useState();
@@ -25,6 +27,7 @@ export default function CreateVacancy() {
   const [skills, setSelectedSkills] = useState([]);
   const [salary_type, setSalaryType] = useState("");
   const [experienceId, setExperienceId] = useState();
+  const [employmentTypeId, setEmploymentTypes] = useState();
   const [description, setDescription] = useState(
     "<h2>Обязанности</h2><ul><li></li><li></li></ul><h2>Требования</h2><ul><li></li><li></li></ul><h2>Условия</h2><ul><li></li><li></li></ul>"
   );
@@ -38,6 +41,7 @@ export default function CreateVacancy() {
     dispatch(getCities());
     dispatch(getExperiences());
     dispatch(getSkills());
+    dispatch(getEmpType());
   }, []);
 
   const handleOnSpecChange = (e) => {
@@ -47,6 +51,7 @@ export default function CreateVacancy() {
   const cities = useSelector((state) => state.vacancy.cities);
   const experiences = useSelector((state) => state.vacancy.experiences);
   const allSkills = useSelector((state) => state.vacancy.skills);
+  const empTypes = useSelector((state) => state.vacancy.empTypes);
 
   const handleChangeExp = (e) => {
     setExperienceId[e.target.value];
@@ -57,6 +62,7 @@ export default function CreateVacancy() {
     setSelectedSkills(arr.join(","));
   };
 
+  const handleSave = () => {};
   return (
     <main>
       <Header />
@@ -202,6 +208,27 @@ export default function CreateVacancy() {
               : []
           }
         />
+
+        <fieldset className="fieldset-vertical fieldset-md">
+          <label>Опыт работы</label>
+          <div>
+            {empTypes.map((et) => (
+              <div className="radio" key={et.id}>
+                <input
+                  type="radio"
+                  value={et.id}
+                  name="exp"
+                  onChange={(e) => setEmploymentTypes(e.target.value)}
+                />
+                <label>{et.name}</label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+
+        <button className="button button-primary" onClick={handleSave}>
+          Создать
+        </button>
       </div>
     </main>
   );

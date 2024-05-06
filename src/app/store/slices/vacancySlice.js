@@ -11,6 +11,7 @@ export const vacancySlice = createSlice({
     cities: [],
     experiences: [],
     skills: [],
+    empTypes: []
   },
   reducers: {
     setMyVacancies: (state, action) => {
@@ -39,6 +40,9 @@ export const vacancySlice = createSlice({
     setSkills: (state, action) => {
       state.skills = action.payload;
     },
+    setEmpType: (state, action) => {
+      state.empTypes = action.payload;
+    },
   },
 });
 
@@ -51,6 +55,7 @@ export const {
   setCities,
   setExperiences,
   setSkills,
+  setEmpType,
 } = vacancySlice.actions;
 
 export const getMyVacancies = () => async (dispatch) => {
@@ -99,6 +104,15 @@ export const getSkills = () => async (dispatch) => {
   }
 };
 
+
+export const getEmpType = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`${END_POINT}/api/employment-types`);
+    dispatch(setEmpType(res.data));
+  } catch (e) {
+    console.error("Error fetching specializations:", e);
+  }
+};
 export const getVacancyById = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`${END_POINT}/api/vacancy/${id}`);

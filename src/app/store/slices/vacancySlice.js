@@ -113,7 +113,7 @@ export const getEmpType = () => async (dispatch) => {
 export const getVacancyById = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`${END_POINT}/api/vacancy/${id}`);
-    dispatch(setVacancy(res.data));
+    dispatch(setVacancy({vacancy: res.data}));
   } catch (e) {
     alert("Something went wrong, Try later!");
   }

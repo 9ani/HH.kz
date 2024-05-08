@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useEffect } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 import Header from "@/components/header";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,25 +14,19 @@ import {
 } from "../store/slices/vacancySlice";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
-import AutoCompliteTags from "@/components/AutoCompliteTags";
-import SelectEmploymentTypes from "@/components/SelectEmploymentTypes";
 import { useRouter } from "next/navigation";
-export default function CreateVacancy() {
-  const [name, setName] = useState("");
+export default function SearchVacancyAdvanced() {
+  const [q, setQ] = useState("");
   const [specializationId, setSpecializationId] = useState();
   const [specializationName, setSpecializationName] = useState();
   const [isSpecModalOpen, setSpecModalOpen] = useState(false);
   const [cityId, setCity] = useState();
-  const [address, setAddress] = useState();
-  const [salary_from, setSalaryFrom] = useState("");
-  const [salary_to, setSalaryTo] = useState("");
-  const [skills, setSelectedSkills] = useState([]);
+  const [salary, setSalary] = useState("");
   const [salary_type, setSalaryType] = useState("");
   const [experienceId, setExperienceId] = useState();
   const [employmentTypeId, setEmploymentTypes] = useState();
-  const [description, setDescription] = useState(
-    "<h2>Обязанности</h2><ul><li></li><li></li></ul><h2>Требования</h2><ul><li></li><li></li></ul><h2>Условия</h2><ul><li></li><li></li></ul>"
-  );
+
+
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -56,55 +49,38 @@ export default function CreateVacancy() {
 
   const cities = useSelector((state) => state.vacancy.cities);
   const experiences = useSelector((state) => state.vacancy.experiences);
-  const allSkills = useSelector((state) => state.vacancy.skills);
   const empTypes = useSelector((state) => state.vacancy.empTypes);
 
   const handleChangeExp = (e) => {
     setExperienceId[e.target.value];
   };
 
-  const onSkillsChange = (data) => {
-    const arr = data.map((item) => item.name);
-    setSelectedSkills(arr.join(","));
-  };
+  const handleSearch = () => {
+    let queryString = "?";
+    if (q) queryString += `q=${q}&`;
+    if(specializationId) queryString += `specializationId=${specializationId}&`
+    if(cityId) queryString += `cityId=${cityId}&`
+    if(salary) queryString += `salary=${salary}&`
+    if(salary_type) queryString += `salary_type=${salary_type}&`
+    if(experienceId) queryString += `experienceId=${experienceId}&`
+    if(employmentTypeId) queryString += `employmentTypeId=${employmentTypeId}&`
 
-  const handleSave = () => {
-    dispatch(
-      createVacancy(
-        {
-          name,
-          specializationId: `${specializationId}`,
-          cityId: `${cityId}`,
-          description,
-          employmentTypeId,
-          salary_from,
-          salary_to,
-          salary_type,
-          address,
-          experienceId,
-          skills,
-          about_company: "",
-        },
-        router
-      )
-    );
+    router.push(`/search/vacancy?q=${queryString}`);
   };
   return (
     <main>
       <Header />
       <div className="container p7">
-        <h1>Создание вакансии</h1>
-
-        <h2>Основная информация</h2>
+        <h1>Поиск вакансии</h1>
 
         <fieldset className="fieldset-vertical">
-          <label>Название вакансии</label>
+          <label>Ключевые слова</label>
           <input
             className="input"
             placeholder="Название"
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
           />
         </fieldset>
         <fieldset className="fieldset-vertical">
@@ -138,17 +114,11 @@ export default function CreateVacancy() {
             <input
               className="input"
               placeholder="От"
-              value={salary_from}
+              value={salary}
               type="text"
-              onChange={(e) => setSalaryFrom(e.target.value)}
+              onChange={(e) => setSalary(e.target.value)}
             />
-            <input
-              className="input"
-              placeholder="До"
-              value={salary_to}
-              type="text"
-              onChange={(e) => setSalaryTo(e.target.value)}
-            />
+
             <select
               className="input"
               name="salary_type"
@@ -160,17 +130,6 @@ export default function CreateVacancy() {
               <option value={"RUB"}>RUB</option>
             </select>
           </div>
-        </fieldset>
-
-        <fieldset className="fieldset-vertical">
-          <label>Адресс</label>
-          <input
-            className="input"
-            placeholder="Введите адрес"
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
         </fieldset>
 
         <fieldset className="fieldset-vertical fieldset-md">
@@ -191,52 +150,6 @@ export default function CreateVacancy() {
         </fieldset>
 
         <fieldset className="fieldset-vertical fieldset-md">
-          <label>Расскажите про вакансию</label>
-          <div>
-            <CKEditor
-              editor={ClassicEditor}
-              config={{
-                toolbar: [
-                  "bold",
-                  "italic",
-                  "bulletedList",
-                  "numberedList",
-                  "redo",
-                ],
-              }}
-              data={description}
-              onReady={(editor) => {
-                console.log("Editor is ready to use!", editor);
-              }}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                setDescription(data);
-              }}
-              onBlur={(event, editor) => {
-                console.log("Blur.", editor);
-              }}
-              onFocus={(event, editor) => {
-                console.log("Focus.", editor);
-              }}
-            />
-          </div>
-        </fieldset>
-
-        <AutoCompliteTags
-          placeholder=""
-          type="text"
-          label="Ключевые навыки"
-          size="fieldset-md fieldset-vertical"
-          items={allSkills}
-          onSelect={onSkillsChange}
-          selected={
-            skills.length > 0
-              ? skills.split(",").map((item) => ({ name: item }))
-              : []
-          }
-        />
-
-        <fieldset className="fieldset-vertical fieldset-md">
           <label>Тип занятости</label>
           <div>
             {empTypes.map((et) => (
@@ -253,8 +166,8 @@ export default function CreateVacancy() {
           </div>
         </fieldset>
 
-        <button className="button button-primary" onClick={handleSave}>
-          Создать
+        <button className="button button-primary" onClick={handleSearch}>
+          Поиск
         </button>
       </div>
     </main>

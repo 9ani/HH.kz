@@ -19,6 +19,7 @@ export default function EmployerSignIn() {
   }, []);
 
   const handleSignIn = () => {
+    console.log({ email, password });
     dispatch(signIn({ email, password }, router));
   };
 

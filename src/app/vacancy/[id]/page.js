@@ -9,6 +9,8 @@ export default function VacancyPage() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const vacancy = useSelector((state) => state.vacancy.vacancy);
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
   const didMount = () => {
     dispatch(getVacancyById(id));
   };
@@ -23,14 +25,16 @@ export default function VacancyPage() {
     <main>
       <Header />
       <div className="container">
-        {/* <div className="flex flex-ai-c flex-jc-sb ptb7">
-          <Link
-            className="button button-secondary-bordered"
-            href={`/edit-resume/${resume.id}`}
-          >
-            Редактировать
-          </Link>
-        </div> */}
+        {currentUser.id === vacancy.userId && (
+          <div className="flex flex-ai-c flex-jc-sb ptb7">
+            <Link
+              className="button button-secondary-bordered"
+              href={`/edit-vacancy/${vacancy.id}`}
+            >
+              Редактировать
+            </Link>
+          </div>
+        )}
         <div className="card mt7">
           <h1>{vacancy.name}</h1>
           <p>
@@ -48,7 +52,9 @@ export default function VacancyPage() {
             <p>Тип занятости: {vacancy.employmentType.name}</p>
           )}
 
-          <button className="button button-primary">Откликнуться</button>
+          {currentUser.id !== vacancy.userId && (
+            <button className="button button-primary">Откликнуться</button>
+          )}
         </div>
 
         {vacancy.company && (

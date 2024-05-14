@@ -12,16 +12,12 @@ export const vacancySlice = createSlice({
     experiences: [],
     skills: [],
     empTypes: [],
-    searchedVacancies: [],
   },
   reducers: {
-    setMyVacancies: (state, action) => {
+    setVacancies: (state, action) => {
       state.vacancies = action.payload.vacancies;
     },
-    setSearchedVacancies:(state, action) =>{
-      state.searchedVacancies = action.payload.vacancies;
-
-    },
+    
     setVacancy: (state, action) => {
       state.vacancy = action.payload.vacancy;
     },
@@ -49,7 +45,7 @@ export const vacancySlice = createSlice({
 });
 
 export const {
-  setMyVacancies,
+  setVacancies,
   setVacancy,
   handleDeleteVacancy,
   setSpecializations,
@@ -57,13 +53,12 @@ export const {
   setExperiences,
   setSkills,
   setEmpType,
-  setSearchedVacancies,
 } = vacancySlice.actions;
 
 export const getMyVacancies = () => async (dispatch) => {
   try {
     const res = await axios.get(`${END_POINT}/api/vacancy`);
-    dispatch(setMyVacancies({ vacancies: res.data }));
+    dispatch(setVacancies({ vacancies: res.data }));
   } catch (e) {
     alert("Something went wrong, Try later!");
   }
@@ -171,7 +166,7 @@ export const getSearchedVacancies = (params) => async (dispatch) => {
       queryString += `employmentTypeId=${employmentTypeId}&`;
 
     const res = await axios.get(`${END_POINT}/api/vacancy/search${queryString}`);
-    dispatch(setSearchedVacancies({ vacancies: res.data }));
+    dispatch(setVacancies({ vacancies: res.data }));
   } catch (e) {
     alert("Something went wrong, Try later!");
   }

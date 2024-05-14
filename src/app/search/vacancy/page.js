@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
+import MyVacancies from "@/components/myvacancies";
 import Vacancy from "@/app/vacancy/page";
 export default function SearchVacancy() {
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ export default function SearchVacancy() {
       <Header />
       <div className="container mt7">
         <div className="flex">
-          <fieldset className="fieldset-vertical pt7">
+          <fieldset className="fieldset-vertical pt7" style={{ width: `100%` }}>
             <input
               className="input"
               placeholder="Название"
@@ -79,11 +80,10 @@ export default function SearchVacancy() {
             />
           </fieldset>
           <button className="button button-primary">Найти</button>
-
         </div>
 
         <div className="flex">
-          <div>
+          <div style={{ width: `20%` }}>
             <fieldset className="fieldset-vertical">
               <label>Указать специализацию</label>
               {specializationName && <p>{specializationName}</p>}
@@ -167,7 +167,9 @@ export default function SearchVacancy() {
               </div>
             </fieldset>
           </div>
-          <div></div>
+          <div style={{ width: `80%`, paddingLeft: `40px` }}>
+            <MyVacancies />
+          </div>
         </div>
       </div>
     </main>

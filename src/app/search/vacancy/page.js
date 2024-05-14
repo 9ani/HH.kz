@@ -1,7 +1,9 @@
 "use client";
 import Header from "@/components/header";
 import Link from "next/link";
+import router from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   getCities,
   getSpecializations,
@@ -9,7 +11,7 @@ import {
   getSkills,
   getEmpType,
   getSearchedVacancies,
-} from "../store/slices/vacancySlice";
+} from "@/app/store/slices/vacancySlice";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
@@ -37,19 +39,42 @@ export default function SearchVacancy() {
   );
   const [specializationName, setSpecializationName] = useState();
   const [isSpecModalOpen, setSpecModalOpen] = useState(false);
+  const closeSpecModal = () => {
+    setSpecModalOpen(false);
+  };
+  const handleOnSpecChange = (e) => {
+    setSpecializationName(e.target.dataset.name);
+    setSpecializationId(e.target.value * 1);
+    closeSpecModal();
+  };
 
-  useEffect(() => {
+  const handleSearch = () => {
     dispatch(
-      getSearchedVacancies({
-        q,
-        specializationId,
-        cityId,
-        experienceId,
-        employmentTypeId,
-        salary,
-        salary_type,
-      })
+      getSearchedVacancies(
+        {
+          q,
+          specializationId,
+          cityId,
+          experienceId,
+          employmentTypeId,
+          salary,
+          salary_type,
+        },
+        router
+      )
     );
+  };
+
+  useEffect(handleSearch, [
+    specializationId,
+    cityId,
+    employmentTypeId,
+    salary,
+    salary_type,
+    experienceId,
+  ]);
+  useEffect(() => {
+    handleSearch();
     dispatch(getSpecializations());
     dispatch(getCities());
     dispatch(getExperiences());
@@ -64,7 +89,6 @@ export default function SearchVacancy() {
   const cities = useSelector((state) => state.vacancy.cities);
   const experiences = useSelector((state) => state.vacancy.experiences);
   const empTypes = useSelector((state) => state.vacancy.empTypes);
-  const vacancies = useSelector((state) => state.vacancy.searchedVacancies);
   return (
     <main>
       <Header />
@@ -79,7 +103,9 @@ export default function SearchVacancy() {
               onChange={(e) => setQ(e.target.value)}
             />
           </fieldset>
-          <button className="button button-primary">Найти</button>
+          <button className="button button-primary" onClick={handleSearch}>
+            Найти
+          </button>
         </div>
 
         <div className="flex">

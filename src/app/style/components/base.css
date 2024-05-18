@@ -89,7 +89,10 @@ body, div, input, li,ul, textarea, span, p , h1, h2, h3, h4, ol, aside, main{
 .mt7{
     margin-top: 40px;
 }
+.mt2{
+    margin-top: 10px;
 
+}
 .mr-4{
     margin-right: 20px;
 }

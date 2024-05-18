@@ -1,0 +1,17 @@
+.row{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.row:nth-child(even){
+    background-color: #f4f4f4;
+}
+.col{
+   width: 33.33%; 
+}
+.row-header{
+    background-color: white;
+}
+.row-header .col{
+    font-weight: 700;
+}

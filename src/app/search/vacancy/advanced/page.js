@@ -11,7 +11,7 @@ import {
   getSkills,
   getEmpType,
   createVacancy,
-} from "../store/slices/vacancySlice";
+} from "@/app/store/slices/vacancySlice";
 import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
 import { useRouter } from "next/navigation";
@@ -65,7 +65,7 @@ export default function SearchVacancyAdvanced() {
     if(experienceId) queryString += `experienceId=${experienceId}&`
     if(employmentTypeId) queryString += `employmentTypeId=${employmentTypeId}&`
 
-    router.push(`/search/vacancy?q=${queryString}`);
+    router.push(`/search/vacancy?${queryString}`);
   };
   return (
     <main>

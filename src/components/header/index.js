@@ -1,16 +1,30 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import logo from "../../app/images/logo.svg";
 import searchIcon from "../../app/images/search.svg";
 import Image from "next/image";
-import { logOut } from "@/app/store/slices/authSlice";
+import { logOut, authorize } from "@/app/store/slices/authSlice";
+import { useEffect } from "react";
 
 export default function Header() {
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth);
   const currentUser = useSelector((state) => state.auth.currentUser);
 
+  useEffect(() => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (token) {
+      let decodeToken = jwtDecode(token);
+      if (decodeToken.exp * 1000 > Date.now()) {
+        dispatch(authorize({token}))
+      } else {
+        localStorage.removeItem("token");
+      }
+    }
+  }, []);
   return (
     <header className="header">
       <div className="container">

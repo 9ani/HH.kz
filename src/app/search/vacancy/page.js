@@ -1,7 +1,6 @@
 "use client";
 import Header from "@/components/header";
 import Link from "next/link";
-import router from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -18,10 +17,11 @@ import ModalSelectSpec from "@/components/ModalSelectSpec";
 import AutoCompliteSelect from "@/components/AutoCompliteSelect";
 import MyVacancies from "@/components/myvacancies";
 import Vacancy from "@/app/vacancy/page";
+import { useRouter } from "next/navigation";
 export default function SearchVacancy() {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
-
+  const router = useRouter()
   const [q, setQ] = useState(searchParams.get("q"));
   const [specializationId, setSpecializationId] = useState(
     searchParams.get("specializationId")

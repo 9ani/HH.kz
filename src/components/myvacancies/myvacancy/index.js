@@ -1,25 +1,31 @@
 "use client";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteVacancy } from "@/app/store/slices/vacancySlice";
 export default function MyVacancy({ item }) {
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
   return (
     <div className="card mtb4">
       <Link className="h3 link" href={`/vacancy/${item.id}`}>
         {item.name}
       </Link>
       <p>Создан {item.createdAt}</p>
-
-     
-      <span
-        className="deleteResume"
-        onClick={() => {
-          dispatch(deleteVacancy(item.id));
-        }}
-      >
-        Удалить
-      </span>
+      <p>
+        {item.salary_from && `от ${item.salary_from}`}{" "}
+        {item.salary_to && `до ${item.salary_to}`}{" "}
+        {item.salary_type && `${item.salary_type}`}
+      </p>
+      {currentUser && item.userId === currentUser.id && (
+        <span
+          className="deleteResume"
+          onClick={() => {
+            dispatch(deleteVacancy(item.id));
+          }}
+        >
+          Удалить
+        </span>
+      )}
     </div>
   );
 }

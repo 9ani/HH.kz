@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getVacancyById } from "@/app/store/slices/vacancySlice";
 import { useParams } from "next/navigation";
 import { getMyResumes } from "@/app/store/slices/resumeSlice";
-import { createApply, getEmployeeApplies } from "@/app/store/slices/applySlice";
+import { createApply, getEmployeeApplies, getVacancyApplies } from "@/app/store/slices/applySlice";
 export default function VacancyPage() {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -23,9 +23,17 @@ export default function VacancyPage() {
   }, [resumes]);
   const didMount = () => {
     dispatch(getVacancyById(id));
-    dispatch(getMyResumes());
-    dispatch(getEmployeeApplies());
+    
   };
+
+  useEffect(()=>{
+    if (currentUser && currentUser.role.name === "employee") {
+      dispatch(getMyResumes());
+      dispatch(getEmployeeApplies());
+    }else if(currentUser){
+        dispatch(getVacancyApplies(id))
+    }
+  }, currentUser)
 
   useEffect(didMount, []);
 
@@ -37,7 +45,7 @@ export default function VacancyPage() {
       })
     );
   };
-  let isApplied = applies.some(item => item.vacancyId === id*1)
+  let isApplied = applies.some((item) => item.vacancyId === id * 1);
   let skills = [];
   if (vacancy.skills) {
     skills = vacancy.skills.split(",");
@@ -57,6 +65,7 @@ export default function VacancyPage() {
           </div>
         )}
         <div className="card mt7">
+          <Link href="/vacancy/2/applies" className="link">{applies.length} соискателей</Link>
           <h1>{vacancy.name}</h1>
           <p>
             {vacancy.salary_from && `от ${vacancy.salary_from}`}{" "}
@@ -77,7 +86,7 @@ export default function VacancyPage() {
               className="input mtb4"
               value={resumeId}
               onChange={(e) => setResume(e.target.value)}
-              style={{maxWidth: `200px`}}
+              style={{ maxWidth: `200px` }}
             >
               {resumes.map((item) => (
                 <option key={item.id} value={item.id}>
@@ -93,7 +102,11 @@ export default function VacancyPage() {
             </button>
           )}
           {currentUser && currentUser.id !== vacancy.userId && isApplied && (
-            <Link className="button button-primary" style={{maxWidth: `200px`}} href="/applies">
+            <Link
+              className="button button-primary"
+              style={{ maxWidth: `200px` }}
+              href="/applies"
+            >
               Смотреть отклик
             </Link>
           )}

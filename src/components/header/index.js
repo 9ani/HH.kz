@@ -19,7 +19,7 @@ export default function Header() {
     if (token) {
       let decodeToken = jwtDecode(token);
       if (decodeToken.exp * 1000 > Date.now()) {
-        dispatch(authorize({token}))
+        dispatch(authorize({ token }));
       } else {
         localStorage.removeItem("token");
       }
@@ -42,6 +42,11 @@ export default function Header() {
               currentUser.role &&
               currentUser.role.name !== "manager" && (
                 <Link href="/resumes">Мои резюме</Link>
+              )}
+            {currentUser &&
+              currentUser.role &&
+              currentUser.role.name !== "manager" && (
+                <Link href="/applies">Отклики</Link>
               )}
             <a>Помощь</a>
           </div>

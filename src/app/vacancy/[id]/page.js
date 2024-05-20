@@ -65,7 +65,7 @@ export default function VacancyPage() {
           </div>
         )}
         <div className="card mt7">
-          <Link href="/vacancy/2/applies" className="link">{applies.length} соискателей</Link>
+          <Link href={`/vacancy/${id}/applies`} className="link">{applies.length} соискателей</Link>
           <h1>{vacancy.name}</h1>
           <p>
             {vacancy.salary_from && `от ${vacancy.salary_from}`}{" "}

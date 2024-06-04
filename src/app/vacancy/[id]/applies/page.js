@@ -16,6 +16,7 @@ export default function VacancyApplies() {
   }, []);
   const applies = useSelector((state) => state.apply.applies);
 
+  const filteredApplies = applies.filter(item => item.status === status)
   return (
     <main>
       <Header />
@@ -50,7 +51,7 @@ export default function VacancyApplies() {
               Отказы
             </div>
           </div>
-          <Applies applies={applies}/>
+          <Applies applies={filteredApplies}/>
         </div>
       </div>
     </main>

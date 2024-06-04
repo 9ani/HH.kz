@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getVacancyApplies } from "@/app/store/slices/applySlice";
-
+import { Applies } from "@/components/VacancyApplies";
 export default function VacancyApplies() {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -50,7 +50,7 @@ export default function VacancyApplies() {
               Отказы
             </div>
           </div>
-          <div>Резюме разное</div>
+          <Applies applies={applies}/>
         </div>
       </div>
     </main>

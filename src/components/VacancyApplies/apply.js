@@ -1,6 +1,7 @@
 "use client";
 import { getAgeFromBirthday } from "@/app/utils/format";
 import { useDispatch } from "react-redux";
+import { acceptApply, declineApply } from "@/app/store/slices/applySlice";
 import Link from "next/link";
 export default function Apply({ item }) {
   const dispatch = useDispatch();
@@ -16,8 +17,8 @@ export default function Apply({ item }) {
         {item.resume.salary_type}
       </h3>
       <div className="flex">
-        <button className="button button-primary mr4">Пригласить</button>
-        <button className="button button-secondary">Отказать</button>
+        {item.status !="INVITATION" && <button className="button button-primary mr4" onClick={()=> dispatch(acceptApply(item.id))}>Пригласить</button>}
+        {item.status !="DECLINED" && <button className="button button-secondary" onClick={()=> dispatch(declineApply(item.id))}>Отказать</button>}
       </div>
     </div>
   );

@@ -22,15 +22,25 @@ export const applySlice = createSlice({
       applies = applies.filter((item) => item.id !== action.payload);
       state.applies = applies;
     },
+    setApplyStatus: (state, action) => {
+      let applies = [...state.applies];
+      applies = applies.map((item) => {
+        if (item.id === action.payload.applyId) {
+          item.status = action.payload.status;
+        }
+        return item;
+      });
+      state.applies = applies;
+    },
   },
 });
 
-export const { appendApply, setApplies, removeApply } = applySlice.actions;
+export const { appendApply, setApplies, removeApply, setApplyStatus } =
+  applySlice.actions;
 
 export const getEmployeeApplies = (data) => (dispatch) => {
   axios
-    .get(`${END_POINT}/api/applies/employee`, {
-    })
+    .get(`${END_POINT}/api/applies/employee`, {})
     .then((res) => {
       dispatch(setApplies(res.data));
     })
@@ -59,6 +69,28 @@ export const createApply = (data) => (dispatch) => {
     })
     .then((res) => {
       dispatch(appendApply(res.data));
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+export const acceptApply = (applyId) => (dispatch) => {
+  axios
+    .put(`${END_POINT}/api/applies/accept/employee`, { applyId })
+    .then((res) => {
+      dispatch(setApplyStatus({ applyId, status: "INVITATION" }));
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+export const declineApply = (applyId) => (dispatch) => {
+  axios
+    .put(`${END_POINT}/api/applies/decline/employee`, { applyId })
+    .then((res) => {
+      dispatch(setApplyStatus({ applyId, status: "DECLINED" }));
     })
     .catch((e) => {
       console.log(e);

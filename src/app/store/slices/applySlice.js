@@ -49,11 +49,9 @@ export const getEmployeeApplies = (data) => (dispatch) => {
     });
 };
 
-export const getVacancyApplies = (data) => (dispatch) => {
+export const getVacancyApplies = (id) => (dispatch) => {
   axios
-    .get(`${END_POINT}/api/applies/vacancy/${id}`, {
-      data,
-    })
+    .get(`${END_POINT}/api/applies/vacancy/${id}`, )
     .then((res) => {
       dispatch(setApplies(res.data));
     })
@@ -64,9 +62,7 @@ export const getVacancyApplies = (data) => (dispatch) => {
 
 export const createApply = (data) => (dispatch) => {
   axios
-    .post(`${END_POINT}/api/applies`, {
-      data,
-    })
+  .post(`${END_POINT}/api/applies`, data)
     .then((res) => {
       dispatch(appendApply(res.data));
     })
@@ -101,10 +97,11 @@ export const deleteApply = (id) => (dispatch) => {
   axios
     .delete(`${END_POINT}/api/applies/${id}`)
     .then((res) => {
-      dispatch(removeApply(id));
+      dispatch(removeApply({ payload: id }));
     })
     .catch((e) => {
       console.log(e);
     });
 };
+
 export default applySlice.reducer;

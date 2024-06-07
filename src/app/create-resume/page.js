@@ -273,7 +273,7 @@ export default function CreateResume() {
         />
 
         <h3>Образование</h3>
-        <AddEducation onChange={(eds) => setEducation(eds)} education={[]} />
+        <AddEducation onChange={(eds) => setEducation(eds)} education={education} />
 
         <h3>Владение языками</h3>
 
@@ -281,7 +281,7 @@ export default function CreateResume() {
           onChange={(lns) => {
             setForeignLanguages(lns);
           }}
-          foreignLanguages={[]}
+          foreignLanguages={foreignLanguages}
         />
 
         <h3>Другая важная информация</h3>

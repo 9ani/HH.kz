@@ -7,12 +7,13 @@ import searchIcon from "../../app/images/search.svg";
 import Image from "next/image";
 import { logOut, authorize } from "@/app/store/slices/authSlice";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth);
   const currentUser = useSelector((state) => state.auth.currentUser);
-
+  const router = useRouter();
   useEffect(() => {
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -83,7 +84,10 @@ export default function Header() {
               </Link>
             )}
             {isAuth && (
-              <a className="header-button" onClick={() => dispatch(logOut())}>
+              <a
+                className="header-button"
+                onClick={() => dispatch(logOut(router))}
+              >
                 Выйти
               </a>
             )}

@@ -21,21 +21,17 @@ export default function VacancyPage() {
       setResume(resumes[0].id);
     }
   }, [resumes]);
-  const didMount = () => {
+  useEffect(() => {
     dispatch(getVacancyById(id));
-    
-  };
-
-  useEffect(()=>{
-    if (currentUser && currentUser.role.name === "employee") {
-      dispatch(getMyResumes());
-      dispatch(getEmployeeApplies());
-    }else if(currentUser){
-        dispatch(getVacancyApplies(id))
+    if (currentUser) {
+      if (currentUser.role.name === "employee") {
+        dispatch(getMyResumes());
+        dispatch(getEmployeeApplies());
+      } else {
+        dispatch(getVacancyApplies(id));
+      }
     }
-  }, currentUser)
-
-  useEffect(didMount, []);
+  }, [dispatch, id, currentUser]);
 
   const handleApply = () => {
     dispatch(
@@ -54,7 +50,7 @@ export default function VacancyPage() {
     <main>
       <Header />
       <div className="container">
-        {currentUser.id && currentUser.id === vacancy.userId && (
+        {currentUser && currentUser.id === vacancy.userId && (
           <div className="flex flex-ai-c flex-jc-sb ptb7">
             <Link
               className="button button-secondary-bordered"

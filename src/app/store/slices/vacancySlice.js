@@ -123,6 +123,7 @@ export const createVacancy = (sendData, router) => async (dispatch) => {
     const res = await axios.post(`${END_POINT}/api/vacancy`, sendData);
     router.push("/vacancy");
   } catch (e) {
+    console.error("Error creating vacancy:", e);
     alert("Something went wrong, Try later!");
   }
 };
